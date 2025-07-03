@@ -1,0 +1,58 @@
+.contact-page {
+  background: white;
+  min-height: 100vh;
+}
+
+.contact-container {
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo img {
+  width: 80px;
+  height: 80px;
+  background: #3e528d;
+  border-radius: 50%;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.contact-info,
+.social-section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 20px 60px rgba(37, 42, 45, 0.1);
+}
+
+h3,
+h4 {
+  color: #3e528d;
+  margin-bottom: 10px;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: #ede5de;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #252a2d;
+  font-size: 12px;
+}
+
+.social-link img {
+  width: 20px;
+  height: 20px;
+}

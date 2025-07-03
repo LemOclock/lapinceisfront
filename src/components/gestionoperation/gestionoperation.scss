@@ -1,0 +1,61 @@
+.montant-depense {
+    position: relative;
+
+    &::before {
+        content: "-";
+        position: absolute;
+        left: 10px;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        color: red;
+        z-index: 1;
+    }
+
+    input {
+        padding-left: 25px;
+    }
+}
+
+
+.montant-revenu {
+    position: relative;
+
+    &::before {
+        content: "+";
+        position: absolute;
+        left: 10px;
+        top: 45%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        color: rgb(30, 255, 0);
+        z-index: 1;
+    }
+
+    input {
+        padding-left: 25px;
+    }
+}
+
+input, select {
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid #a7bcb7;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #ede5de;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #3e528d;
+  background: white;
+}
+
+.ajoutoperation {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  
+}
