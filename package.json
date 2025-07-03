@@ -2,9 +2,11 @@
   "name": "projet-la-pince-front",
   "version": "1.0.0",
   "type": "module",
+  "source": "index.html",
+  "main": "index.html",
   "scripts": {
     "start": "parcel index.html --no-cache",
-    "build": "parcel build index.html --dist-dir dist"
+    "build": "parcel build index.html"
   },
   "keywords": [],
   "author": "",

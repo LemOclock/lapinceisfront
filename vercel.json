@@ -1,24 +1,11 @@
 {
-  "buildCommand": "npm run build",
+  "framework": "parcel",
+  "buildCommand": "npx parcel build index.html",
   "outputDirectory": "dist",
-  "devCommand": "npm start",
-  "installCommand": "npm install",
-  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/static/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
     }
   ]
 }
