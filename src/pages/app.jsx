@@ -7,7 +7,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import Gestion from "../pages/gestion/gestion";
 import Log from "../pages/log/Log";
 import Profil from "../pages/profil/Profil";
-import TermsConditions from "../pages/termsconditions/TermsConditions";
+import TermsConditions from "../pages/termsConditions/TermsConditions";
 import Landing from "../pages/landing/landing";
 
 function App() {

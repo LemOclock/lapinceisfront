@@ -1,11 +1,9 @@
 {
-  "framework": "parcel",
-  "buildCommand": "npx parcel build index.html",
-  "outputDirectory": "dist",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "**/*",
+      "use": "@vercel/static"
     }
   ]
 }
