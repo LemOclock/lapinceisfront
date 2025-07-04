@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "parcel index.html --no-cache",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --public-url ./"
   },
   "keywords": [],
   "author": "",
