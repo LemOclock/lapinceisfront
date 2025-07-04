@@ -1,7 +1,7 @@
 import "./gestion.scss";
 import "../../global.scss";
-import Navbar from "../../components/navbar/Navbar";
-import Footer from "../../components/Footer/footer";
+import Navbar from "../../components/navbar/navbar";
+import Footer from "../../components/footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
@@ -9,7 +9,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
 import { GestionDepense, GestionRevenu } from "../../components/gestionoperation/gestionoperation";
 import { getOperationByDate } from "../../api/gestion";
-import  GestionModifyDeleteOperation from '../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation'
+import GestionModifyDeleteOperation from '../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation'
 
 const localizer = momentLocalizer(moment);
 
@@ -110,15 +110,15 @@ export default function Gestion() {
   }
 
 
-  const modifyPopup = (operation) =>{
-  console.log("Ouverture du popup de modification pour:", operation);
-  setShowModifyDeleteModal(true)
-  setSelectedOperation(operation)
+  const modifyPopup = (operation) => {
+    console.log("Ouverture du popup de modification pour:", operation);
+    setShowModifyDeleteModal(true)
+    setSelectedOperation(operation)
 
   }
-  const closeModifyPopup = () =>{
-  setShowModifyDeleteModal(false)
-  setSelectedOperation(null)
+  const closeModifyPopup = () => {
+    setShowModifyDeleteModal(false)
+    setSelectedOperation(null)
 
   }
 
@@ -174,7 +174,7 @@ export default function Gestion() {
                     {operationByDate.map((operation, index) => (
                       <tr
                         key={index}
-                      onClick={() =>  {modifyPopup(operation) }}
+                        onClick={() => { modifyPopup(operation) }}
                       >
                         <td>{operation.nom_operation}</td>
                         <td>{operation.montant_operation}</td>
@@ -220,9 +220,9 @@ export default function Gestion() {
         )}
         {showModifyDeleteModal && (
           <GestionModifyDeleteOperation
-          operation={selectedOperation}
-          onClose={closeModifyPopup}
-          
+            operation={selectedOperation}
+            onClose={closeModifyPopup}
+
           />
         )
 
@@ -254,7 +254,7 @@ export default function Gestion() {
           />
         )}
 
-        
+
 
         <div className="boutonbudgetconteneur">
           <button className="buttonbleu boutonbudget">
