@@ -1,5 +1,5 @@
 import Navbar from '../../components/navbar/navbar';
-import Footer from '../../components/Footer/footer';
+import Footer from '../../components/footer/footer';
 import Alertes from '../../components/alertes/alertes';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import "./AccountConfig.scss";
 import { accountConfig } from "../../api/accountConfig";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,7 @@ const AccountConfig = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('🚀 Données envoyées:', allData);
+        console.log('🚀 Données envoyées:', allData);
 
     try {
       const response = await accountConfig(allData);
@@ -40,7 +40,7 @@ const AccountConfig = () => {
       <div className="account-config-container">
         <div className="account-config-card">
           <div className="logo">
-            <img src="../../img/logo.png" alt="La Pince" />
+            <img src="/images/logo.png" alt="La Pince" />
           </div>
 
           <div className="page-title">
