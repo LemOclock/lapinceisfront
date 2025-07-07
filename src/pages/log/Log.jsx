@@ -2,9 +2,10 @@ import React from "react";
 import "./Log.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/footer/footer";
-
+import Footer from "../../components/Footer/footer";
 import { login, register } from "../../api/auth";
+
+
 
 const Log = () => {
   const Navigate = useNavigate();
@@ -23,11 +24,18 @@ const Log = () => {
     telephone: "",
   });
 
+  const [showAlert, setShowAlert] = useState(false);
+
+
+
+
+
   const handleChangeLogin = (e) =>
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
 
   const handleChangeRegister = (e) =>
     setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -57,8 +65,15 @@ const Log = () => {
     try {
       const response = await register(registerData);
       console.log("Register successful:", response.data);
-      // Redirection ou gestion du succès
-      Navigate(response.data.redirectUrl); // Redirige vers la page de connexion après l'inscription réussie
+
+      setShowAlert(true);
+
+      // Masquer l'alerte après 3 secondes
+      setTimeout(() => {
+        setShowAlert(false);
+        setShowLogin(true); // Retourner au login
+      }, 5000);
+
     } catch (error) {
       console.error("Register error:", error);
     }
@@ -67,6 +82,12 @@ const Log = () => {
   return (
     <>
       <div className="log-container">
+        {showAlert && (
+          <div className="alertregister">
+            <p>Inscription réussie ! 🎉</p>
+            <p>Vous allez être rediriger.</p>
+          </div>
+        )}
         <div className="logo_container">
           <img
             src="https://i.imgur.com/HrPQbHZ.png"
@@ -76,14 +97,14 @@ const Log = () => {
         </div>
         <div className="toggle-buttons">
           <button
-            id="login"
+            id="loginbutton"
             className={showLogin ? "active" : ""}
             onClick={() => setShowLogin(true)}
           >
             Se connecter
           </button>
           <button
-            id="register"
+            id="registerbutton"
             className={!showLogin ? "active" : ""}
             onClick={() => setShowLogin(false)}
           >
@@ -159,6 +180,9 @@ const Log = () => {
               onChange={handleChangeRegister}
               required
             />
+
+
+
             <label> Numéro de téléphone</label>
             <input
               type="text"
@@ -169,6 +193,7 @@ const Log = () => {
               onChange={handleChangeRegister}
             />
             <button type="submit">S'inscrire</button>
+
           </form>
         )}
       </div>

@@ -1,7 +1,7 @@
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
@@ -9,7 +9,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
 import { GestionDepense, GestionRevenu } from "../../components/gestionoperation/gestionoperation";
 import { getOperationByDate, getOperationsByMonth } from "../../api/gestion";
-import GestionModifyDeleteOperation from '../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation'
 
 const localizer = momentLocalizer(moment);
 
@@ -103,8 +102,18 @@ export default function Gestion() {
       return operation.date.toDateString() === value.toDateString();
     });
 
+
+    const handleClick = () => {
+      const slotInfo = { start: value }
+      getOperationBy(slotInfo); // Appel de la fonction pour récupérer les opérations de cette date
+    }
+
+
+
+
+
     return (
-      <div className="custom-date-cell-wrapper">
+      <div className="custom-date-cell-wrapper" onTouchStart={handleClick} onClick={handleClick}>
         {children} {/* Le numéro du jour */}
         {/* Afficher SEULEMENT les opérations de cette date */}
         {dayOperations.length > 0 && (
@@ -200,13 +209,16 @@ export default function Gestion() {
             components={{
               toolbar: CustomToolbar,
               dateCellWrapper: CustomDateCellWrapper
-            }}
+            }} 
             onSelectSlot={getOperationBy}
+
             style={{
               height: "70vh",
               width: "100%",
             }}
           />
+
+
         </div>
 
         {popupInfo && (

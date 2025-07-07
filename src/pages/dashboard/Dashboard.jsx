@@ -1,6 +1,10 @@
 import Navbar from '../../components/navbar/navbar';
-import Footer from '../../components/footer/footer';
+import Footer from '../../components/Footer/footer';
 import Alertes from '../../components/alertes/alertes';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+
+const localizer = momentLocalizer(moment);
 
 export default function Dashboard() {
     return (
@@ -13,7 +17,19 @@ export default function Dashboard() {
                 <aside>
                     <Alertes />
                 </aside>
-                <p>CALENDRIER SEMAINE A FAIRE ICI</p>
+
+                {/* <Calendar
+                    localizer={localizer}
+                    events={[]}
+                    views={["week"]}
+                    components={{
+                        timeGutterHeader: () => null,
+                        timeGutter: () => null
+                    }}
+                /> */}
+
+
+
                 <div>
                     <img src="./graphrevenudepense.png" alt="graphrevenudepense" />
                     <p>Revenus : 3400€</p>

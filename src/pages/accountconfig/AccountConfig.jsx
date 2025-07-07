@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import "./AccountConfig.scss";
 import { accountConfig } from "../../api/accountConfig";
 import { useNavigate } from "react-router-dom";

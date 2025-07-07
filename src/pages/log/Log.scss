@@ -10,8 +10,7 @@
 }
 
 // Styles pour les formulaires
-#login,
-#register {
+#login, #register {
   background: white;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(37, 42, 45, 0.1);
@@ -36,8 +35,7 @@
 }
 
 // Styles pour tous les inputs
-#login input,
-#register input {
+#login input, #register input {
   width: 100%;
   padding: 15px 20px;
   border: 2px solid #a7bcb7;
@@ -47,26 +45,19 @@
   box-sizing: border-box;
 }
 
-#login input:focus,
-#register input:focus {
+#login input:focus, #register input:focus {
   outline: none;
   border-color: #3e528d;
   background: white;
 }
 
 // Styles pour les inputs spécifiques
-#email_login,
-#password_login,
-#nom,
-#prenom,
-#email_register,
-#mot_de_passe {
+#email_login, #password_login, #nom, #prenom, #email_register, #mot_de_passe {
   margin-bottom: 15px;
 }
 
 // Styles pour les boutons
-#login button,
-#register button {
+#login button, #register button {
   width: 100%;
   background: #3e528d;
   color: white;
@@ -79,8 +70,7 @@
   margin-top: 10px;
 }
 
-#login button:hover,
-#register button:hover {
+#login button:hover, #register button:hover {
   background: #c8321f;
 }
 
@@ -131,15 +121,45 @@
   color: #eaa93d;
 }
 
-.logo_container {
+.logo_container{
   display: flex;
   justify-content: center;
-  background-color: #3e528d;
+  background-color:#3e528d;
   border-radius: 100%;
 
 
 
-  .logo {
-    width: 200px;
-  }
+  .logo{
+  width: 200px;
 }
+}
+
+.alertregister {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: #3e528d;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-size: 0.7rem;
+  animation: animateAlertRegister 5s;
+
+}
+@keyframes animateAlertRegister {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+  
+}
+  
+
+
