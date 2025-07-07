@@ -1,3 +1,4 @@
+import GestionModifyDeleteOperation from "../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation";
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
@@ -209,7 +210,7 @@ export default function Gestion() {
             components={{
               toolbar: CustomToolbar,
               dateCellWrapper: CustomDateCellWrapper
-            }} 
+            }}
             onSelectSlot={getOperationBy}
 
             style={{
