@@ -18,3 +18,12 @@ export const findCompteId = () =>
 
 export const getOperationByDate = (date) =>
     api.get(`/operations/account/getoperationbydate?date_operation=${date}`);
+
+export const updateOperationAccount = (operationId, data) =>
+    api.put(`/operations/account/${operationId}`, data);
+
+export const deleteOperationAccount = (operationId) =>
+    api.delete(`/operations/account/${operationId}`);
+
+export const getOperationsByMonth = (month, year) =>
+    api.get(`/operations/account/month?month=${month}&year=${year}`);

@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/Footer/footer";
 import "./Contact.scss";
 
 const Contact = ({ isLoggedIn = false }) => {

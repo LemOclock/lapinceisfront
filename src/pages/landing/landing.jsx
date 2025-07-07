@@ -1,5 +1,5 @@
-import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/Footer/footer";
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import Camembert from "../../components/camembert/camembert";

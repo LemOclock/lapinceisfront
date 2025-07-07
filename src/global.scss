@@ -16,7 +16,7 @@
 
 }
 
-p{
+p {
     font-family: 'RocaThin', sans-serif;
     text-align: center;
     margin-left: 2rem;
@@ -29,6 +29,7 @@ html {
     font-size: 1.5rem;
     line-height: 1.5;
     margin-bottom: 0;
+    background: linear-gradient(135deg, #ede5de 0%, #a7bcb7 100%);
 
 
     h1 {
@@ -44,6 +45,7 @@ html {
         margin: 1rem;
         display: flex;
         flex-direction: column;
+
 
         .buttonbleu {
             padding: 0.75rem 1.25rem;
@@ -62,6 +64,48 @@ html {
                 text-decoration: none;
                 color: white;
             }
+
+
+        }
+
+        .supressionbutton {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.5rem;
+            border-radius: 10px;
+            border: none;
+            background-color: red;
+            color: white;
+            transition: 0.5s;
+
+            &:hover {
+                background-color: rgb(102, 2, 2);
+                cursor: pointer;
+            }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+        }
+
+        .supressionoperation {
+            text-align: right;
+            margin-top: 2rem; 
+
         }
     }
+.custom-date-cell-wrapper{
+    align-content: end;
+    text-align: center;
+    
+    .operation-icon{
+        background-color: #ede5de;
+        border: 1px solid rgb(131, 104, 84);
+        border-radius: 100%;
+        max-width: 15%;
+        margin-left: -10px;
+
+    }
+}
 }

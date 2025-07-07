@@ -1,14 +1,14 @@
 import "./gestion.scss";
 import "../../global.scss";
-import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/Footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GestionDepense, GestionRevenu } from "../../components/gestionoperation/gestionoperation";
-import { getOperationByDate } from "../../api/gestion";
+import { getOperationByDate, getOperationsByMonth } from "../../api/gestion";
 import GestionModifyDeleteOperation from '../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation'
 
 const localizer = momentLocalizer(moment);
@@ -39,21 +39,51 @@ export default function Gestion() {
   const [showModifyDeleteModal, setShowModifyDeleteModal] = useState(false)
   const [selectedOperation, setSelectedOperation] = useState(null)
   const [operationByDate, setOperationByDate] = useState([]);
+  const [monthlyOperations, setMonthlyOperations] = useState([]);
+
+  const loadMonthlyOperations = async () => {
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+
+    try {
+      const operations = await getOperationsByMonth(month, year);
+      console.log("Opérations du mois récupérées :", operations.data);
 
 
+      const operationEvents = operations.data.map(operation => ({
+        id: operation.id,
+        date: new Date(operation.date_operation),
+        icone: operation.Categorie?.icone || '💰',
+        nom: operation.nom_operation,
+        montant: operation.montant_operation
+      }));
 
+      setMonthlyOperations(operationEvents);
+      console.log('toute les op' + operationEvents);
+
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  };
+  useEffect(() => {
+    loadMonthlyOperations();
+  }, [currentDate]);
+  // Se lance à chaque fois que currentDate change
   // Toolbar pour le calendrier (Précédent, Suivant, Aujourd'hui)
   const CustomToolbar = ({ onNavigate, label }) => {
     const goToCurrent = () => {
       const today = new Date();
       setCurrentDate(today);
+      loadMonthlyOperations();
       onNavigate(Navigate.TODAY);
     };
     const goToNext = () => {
       onNavigate(Navigate.NEXT);
+      loadMonthlyOperations();
     };
     const goToPrev = () => {
       onNavigate(Navigate.PREVIOUS);
+      loadMonthlyOperations();
     };
 
     return (
@@ -66,6 +96,32 @@ export default function Gestion() {
     );
   };
 
+  const CustomDateCellWrapper = ({ children, value }) => {
+    // Filtrer les opérations pour cette date spécifique SEULEMENT
+    const dayOperations = monthlyOperations.filter(operation => {
+      // operation.date est déjà un objet Date, pas besoin de new Date()
+      return operation.date.toDateString() === value.toDateString();
+    });
+
+    return (
+      <div className="custom-date-cell-wrapper">
+        {children} {/* Le numéro du jour */}
+        {/* Afficher SEULEMENT les opérations de cette date */}
+        {dayOperations.length > 0 && (
+          <div className="operation-icons">
+            {dayOperations.slice(0, 3).map((operation, index) => (
+              <span key={index} className="operation-icon" title={operation.nom}>
+                {operation.icone}
+              </span>
+            ))}
+            {dayOperations.length > 3 && (
+              <span className="more-operations">+{dayOperations.length - 3}</span>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Fonction pour afficher le popup avec la date sélectionnée
   const popup = (slotInfo) => {
@@ -141,7 +197,10 @@ export default function Gestion() {
             date={currentDate}
             onNavigate={(date) => setCurrentDate(date)}
             dayPropGetter={dayPropGetter}
-            components={{ toolbar: CustomToolbar }}
+            components={{
+              toolbar: CustomToolbar,
+              dateCellWrapper: CustomDateCellWrapper
+            }}
             onSelectSlot={getOperationBy}
             style={{
               height: "70vh",
@@ -181,6 +240,9 @@ export default function Gestion() {
                         <td> {operation.Categorie?.icone} {operation.Categorie?.nom_categorie}</td>
                       </tr>
                     ))}
+                    {/* { operationByDate.map == "" && 
+
+                    } */}
                   </tbody>
                 </table>
 
@@ -222,6 +284,11 @@ export default function Gestion() {
           <GestionModifyDeleteOperation
             operation={selectedOperation}
             onClose={closeModifyPopup}
+            dateFR={popupInfo ? popupInfo.date : dateFR}
+            onModify={() => {
+              console.log("Opération modifiée avec succès");
+              loadMonthlyOperations()
+            }}
 
           />
         )
@@ -234,7 +301,7 @@ export default function Gestion() {
             onClose={() => setShowAddExpenseModalDepense(false)}
             onExpenseAdded={() => {
               console.log("Dépense ajoutée avec succès");
-
+              loadMonthlyOperations();
             }}
             dateFR={popupInfo ? popupInfo.date : dateFR}
 
@@ -247,7 +314,7 @@ export default function Gestion() {
             onClose={() => setShowAddExpenseModalRevenu(false)}
             onExpenseAdded={() => {
               console.log("Revenu ajoutée avec succès");
-
+              loadMonthlyOperations();
             }}
             dateFR={popupInfo ? popupInfo.date : dateFR}
 

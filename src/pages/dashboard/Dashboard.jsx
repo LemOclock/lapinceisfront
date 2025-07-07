@@ -1,5 +1,5 @@
-import Navbar from '../../components/navbar/navbar';
-import Footer from '../../components/footer/footer';
+import Navbar from '../../components/navbar/Navbar';
+import Footer from '../../components/Footer/footer';
 import Alertes from '../../components/alertes/alertes';
 
 export default function Dashboard() {

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { sendForm, findCompteId, getAllCategories } from '../../api/gestion';
 import { log } from "console";
 
-export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR}) {
-    
+export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }) {
+
     const [categories, setCategories] = useState([]);
     const [expenseForm, setExpenseForm] = useState({
         montant_operation: "",
@@ -15,8 +15,7 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR})
         date_operation: selectedDate || "",
         type_operation: 'depense',
         compteId: "",
-        categorieId: "",
-        image_operation: ""
+        categorieId: ""
     });
 
     const fetchCategories = async () => {
@@ -54,7 +53,8 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR})
             }
 
             const compteId = await findCompteId();
-            console.log("Compte ID trouvé :", compteId);
+            console.log("Compte ID trouvé :", compteId.data.id
+            );
 
             const expenseData = {
                 ...expenseForm,
@@ -72,10 +72,9 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR})
                 moyen_paiement: "",
                 lieu: "",
                 date_operation: selectedDate || "",
-                type_operation: 'depense',
+                type_operation: "",
                 compteId: "",
-                categorieId: "",
-                image_operation: ""
+                categorieId: ""
             });
 
             // Notifier le parent et fermer
@@ -189,8 +188,7 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
         date_operation: selectedDate || "",
         type_operation: 'revenu',
         compteId: "",
-        categorieId: "",
-        image_operation: ""
+        categorieId: ""
     });
 
     const fetchCategories = async () => {
@@ -228,18 +226,18 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
             }
 
             const compteId = await findCompteId();
-            console.log("Compte ID trouvé :", compteId);
+            console.log("Compte ID trouvé :", compteId.data.id);
 
             const expenseData = {
                 ...expenseForm,
                 compteId,
                 montant_operation: Math.abs(parseFloat(expenseForm.montant_operation)),
             };
-            
-            
+
+
 
             const response = await sendForm(expenseData);
-            console.log("Dépense ajoutée avec succès :", response.data);
+            console.log("Revenu ajouté avec succès :", response.data);
 
             // Réinitialiser le formulaire
             setExpenseForm({
@@ -248,10 +246,9 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
                 moyen_paiement: "",
                 lieu: "",
                 date_operation: selectedDate || "",
-                type_operation: 'depense',
+                type_operation: "",
                 compteId: "",
-                categorieId: "",
-                image_operation: ""
+                categorieId: ""
             });
 
             // Notifier le parent et fermer
@@ -259,7 +256,7 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
             if (onClose) onClose();
 
         } catch (error) {
-            console.error("Erreur lors de l'ajout de la dépense :", error);
+            console.error("Erreur lors de l'ajout du revenu :", error);
         }
     };
 
@@ -307,7 +304,7 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
                             required
                         >
                             <option value="">Choisissez une catégorie</option>
-                            {categories.slice(0,7).map((categorie) => (
+                            {categories.slice(0, 7).map((categorie) => (
                                 <option key={categorie.id} value={categorie.id}>
                                     {categorie.icone + ' ' + categorie.nom_categorie}
                                 </option>

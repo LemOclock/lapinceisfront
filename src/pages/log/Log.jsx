@@ -2,7 +2,7 @@ import React from "react";
 import "./Log.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 
 import { login, register } from "../../api/auth";
 
