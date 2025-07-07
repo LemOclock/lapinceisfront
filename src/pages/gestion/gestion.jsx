@@ -1,7 +1,7 @@
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
@@ -111,7 +111,7 @@ export default function Gestion() {
           <div className="operation-icons">
             {dayOperations.slice(0, 3).map((operation, index) => (
               <span key={index} className="operation-icon" title={operation.nom}>
-               {operation.icone}
+                {operation.icone}
               </span>
             ))}
             {dayOperations.length > 3 && (
