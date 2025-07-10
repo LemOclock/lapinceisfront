@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import "./Budget.scss";
 import {
   getUserBudgets,
