@@ -28,15 +28,6 @@
   }
 }
 
-.logo img {
-  width: 80px;
-  height: 80px;
-  background: #3e528d;
-  border-radius: 50%;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
 .terms-content {
   background: white;
   border-radius: 20px;
@@ -71,3 +62,41 @@
     font-weight: 600;
   }
 }
+
+.terms-container {
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .terms-container {
+    max-width: 1600px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 60px;
+    text-align: left;
+    margin: 0 auto 40px auto;
+    background: #fff;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(37, 42, 45, 0.13);
+    padding: 60px 60px;
+  }
+
+  .terms-content {
+    flex: 1 1 0;
+    padding: 0;
+    font-size: 1.18rem;
+    border-radius: 0 32px 32px 0;
+    min-height: 320px;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+

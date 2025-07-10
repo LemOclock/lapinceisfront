@@ -1,21 +1,18 @@
 import React from "react";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import "./TermsConditions.scss";
+import "../../global.scss";
 
 const TermsConditions = ({ isLoggedIn = false }) => {
   return (
     <div className="terms-page">
-      {isLoggedIn ? (
-        <Navbar />
-      ) : (
-        <button className="buttonbleu">Se connecter</button>
-      )}
+
+      <Navbar />
+
 
       <div className="terms-container">
-        <div className="logo">
-          <img src="/images/logo.png" alt="La Pince" />
-        </div>
+        
 
         <div className="terms-content">
           <h2>Conditions Générales d'Utilisation (CGU)</h2>

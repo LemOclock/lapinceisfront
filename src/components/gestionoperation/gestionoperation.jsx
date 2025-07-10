@@ -6,6 +6,7 @@ import { log } from "console";
 
 export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }) {
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [categories, setCategories] = useState([]);
     const [expenseForm, setExpenseForm] = useState({
         montant_operation: "",
@@ -45,6 +46,9 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }
     const handleAddExpense = async (e) => {
         e.preventDefault();
 
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        setTimeout(() => setIsSubmitting(false), 2000); // Réactive après 2s
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -84,6 +88,9 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }
         } catch (error) {
             console.error("Erreur lors de l'ajout de la dépense :", error);
         }
+
+
+
     };
 
     return (
@@ -161,7 +168,7 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }
                         />
 
                         <div className="ajoutoperation">
-                            <button type="submit" className="buttonbleu">
+                            <button type="submit" className="buttonbleu" disabled={isSubmitting}>
                                 Ajouter la dépense
                             </button>
                         </div>
@@ -179,6 +186,7 @@ export function GestionDepense({ selectedDate, onClose, onExpenseAdded, dateFR }
 
 
 export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR }) {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [categories, setCategories] = useState([]);
     const [expenseForm, setExpenseForm] = useState({
         montant_operation: "",
@@ -217,7 +225,9 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
 
     const handleAddExpense = async (e) => {
         e.preventDefault();
-
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        setTimeout(() => setIsSubmitting(false), 2000); // Réactive après 2s
         try {
             const token = localStorage.getItem("token");
             if (!token) {
@@ -258,6 +268,9 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
         } catch (error) {
             console.error("Erreur lors de l'ajout du revenu :", error);
         }
+
+
+
     };
 
     return (
@@ -335,7 +348,7 @@ export function GestionRevenu({ selectedDate, onClose, onExpenseAdded, dateFR })
                         />
 
                         <div className="ajoutoperation">
-                            <button type="submit" className="buttonbleu">
+                            <button type="submit" className="buttonbleu" disabled={isSubmitting}>
                                 Ajouter un revenu
                             </button>
                         </div>

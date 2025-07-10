@@ -10,14 +10,6 @@
   text-align: center;
 }
 
-.logo img {
-  width: 80px;
-  height: 80px;
-  background: #3e528d;
-  border-radius: 50%;
-  padding: 15px;
-  margin-bottom: 20px;
-}
 
 .contact-info,
 .social-section {
@@ -52,7 +44,31 @@ h4 {
   font-size: 12px;
 }
 
-.social-link img {
-  width: 20px;
-  height: 20px;
+.contact-info p {
+  margin: 0 0 10px 0;
+  word-break: break-all;
+}
+
+.contact-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 900px) {
+  .contact-container {
+    max-width: 900px;
+  }
+
+  .contact-sections {
+    flex-direction: row;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .contact-info,
+  .social-section {
+    flex: 1 1 0;
+    min-width: 0;
+  }
 }

@@ -1,21 +1,18 @@
 import React from "react";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import "./About.scss";
+import "../../global.scss";
 
-const About = ({ isLoggedIn = false }) => {
+const About = () => {
   return (
     <div className="about-page">
-      {isLoggedIn ? (
-        <Navbar />
-      ) : (
-        <button className="buttonbleu">Se connecter</button>
-      )}
+      <Navbar />
+
+      <h1 className="about-title">À propos</h1>
 
       <div className="about-container">
-        <div className="logo">
-          <img src="/images/logo.png" alt="La Pince" />
-        </div>
+
 
         <div className="about-content">
           <h2>Une application pensée pour vous, pas pour les experts</h2>
@@ -29,7 +26,7 @@ const About = ({ isLoggedIn = false }) => {
             reprendre le contrôle.
           </p>
 
-          <h3>Pourquoi La Pince ?</h3>
+          <h2>Pourquoi La Pince ?</h2>
           <p>
             Parce qu'on veut vous éviter les fins de mois difficiles. Parce
             qu'on croit qu'on peut tous apprendre à mieux gérer notre argent,
@@ -44,7 +41,7 @@ const About = ({ isLoggedIn = false }) => {
             meilleures décisions.
           </p>
 
-          <h3>Notre approche</h3>
+          <h2>Notre approche</h2>
           <p>
             Dans un monde rempli d'outils bancaires compliqués ou fermés, La
             Pince choisit la simplicité :
@@ -63,7 +60,7 @@ const About = ({ isLoggedIn = false }) => {
             son budget, ça ne devrait pas être une prise de tête.
           </p>
 
-          <h3>Notre équipe</h3>
+          <h2>Notre équipe</h2>
           <p>
             Derrière La Pince, une équipe de passionnés convaincus qu'un
             meilleur rapport à l'argent commence par une bonne information, des
@@ -71,6 +68,14 @@ const About = ({ isLoggedIn = false }) => {
             On avance ensemble, avec vous, pour rendre la gestion financière
             plus humaine, plus simple, et plus efficace.
           </p>
+          <ul className="team-list">
+            <li><strong>Lead dev front :</strong> Andy </li>
+            <li><strong>Lead dev back :</strong> Isahia</li>
+            <li><strong>Product Owner :</strong> Benoit</li>
+            <li><strong>Scrum Master :</strong> Elyes</li>
+          </ul>
+
+
         </div>
       </div>
 

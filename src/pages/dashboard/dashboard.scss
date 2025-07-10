@@ -1,0 +1,161 @@
+.container-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+
+}
+
+.rbc-time-header-gutter,
+.rbc-time-gutter {
+    display: none;
+}
+
+.rbc-time-header {
+    display: none; // Cache l'en-tête des heures
+}
+
+.rbc-time-content {
+    .rbc-time-column {
+        display: none; // Cache la colonne des heures
+    }
+    
+}
+
+.rbc-time-slot {
+    border: none; // Retire les bordures des créneaux horaires
+}
+
+.rbc-day-slot {
+    min-height: auto; // Ajuste la hauteur
+}
+
+
+.rbc-time-header-cell {
+    height: 100px; // Ajuste la hauteur des cellules d'en-tête
+}
+
+
+
+.container-calendar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+
+
+    .rbc-calendar {
+        width: 100%;
+        border: none !important;
+
+        * {
+            border: none !important;
+        }
+
+        .rbc-toolbar {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .rbc-toolbar-label {
+                display: flex;
+                justify-content: center;
+                font-size: 0.6rem;
+            }
+
+        }
+
+        .rbc-row-bg {
+            border: none;
+            width: 100%;
+
+            .custom-date-cell-wrapper {
+                background-color: #ede5de;
+                border-radius: 0.5rem;
+                margin-left: 0.1rem;
+                margin-right: 0.1rem;
+                height: 3rem;
+                .date {
+                    display: flex;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 0.4rem;
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    transform: translateX(50%);
+                    color: #333;
+                }
+            }
+        }
+
+    }
+
+}
+
+.calendar-arrow {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.calendar-arrow:hover {
+    color: #007bff;
+}
+
+
+
+.container-title {
+    display: flex;
+    justify-content: center;
+
+}
+
+.nomaccount {
+    width: 10%;
+
+
+}
+
+.container-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.solde-positive {
+    background-color: #078616; // vert
+    color: #fff;
+}
+
+.solde-negative {
+    background-color: #e74c3c; // rouge
+    color: #fff;
+}
+
+
+.container-solde {
+    border-radius: 100%;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+
+.rbc-row.rbc-time-header-cell {
+    display: none; // Cache la ligne d'en-tête des heures
+    height: 0; // Réduit la hauteur à zéro
+}
+
+.rbc-allday-cell{
+    min-height: 4rem;
+}

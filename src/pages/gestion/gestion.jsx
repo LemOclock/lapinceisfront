@@ -1,8 +1,7 @@
-import GestionModifyDeleteOperation from "../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation";
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
@@ -10,6 +9,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
 import { GestionDepense, GestionRevenu } from "../../components/gestionoperation/gestionoperation";
 import { getOperationByDate, getOperationsByMonth } from "../../api/gestion";
+import GestionModifyDeleteOperation from "../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation";
+
 
 const localizer = momentLocalizer(moment);
 
@@ -49,7 +50,6 @@ export default function Gestion() {
       const operations = await getOperationsByMonth(month, year);
       console.log("Opérations du mois récupérées :", operations.data);
 
-
       const operationEvents = operations.data.map(operation => ({
         id: operation.id,
         date: new Date(operation.date_operation),
@@ -69,6 +69,8 @@ export default function Gestion() {
     loadMonthlyOperations();
   }, [currentDate]);
   // Se lance à chaque fois que currentDate change
+
+
   // Toolbar pour le calendrier (Précédent, Suivant, Aujourd'hui)
   const CustomToolbar = ({ onNavigate, label }) => {
     const goToCurrent = () => {
@@ -102,7 +104,7 @@ export default function Gestion() {
       // operation.date est déjà un objet Date, pas besoin de new Date()
       return operation.date.toDateString() === value.toDateString();
     });
-
+    
 
     const handleClick = () => {
       const slotInfo = { start: value }
@@ -115,7 +117,7 @@ export default function Gestion() {
 
     return (
       <div className="custom-date-cell-wrapper" onTouchStart={handleClick} onClick={handleClick}>
-        {children} {/* Le numéro du jour */}
+      
         {/* Afficher SEULEMENT les opérations de cette date */}
         {dayOperations.length > 0 && (
           <div className="operation-icons">

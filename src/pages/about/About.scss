@@ -11,15 +11,6 @@
   text-align: center;
 }
 
-.logo img {
-  width: 80px;
-  height: 80px;
-  background: #3e528d;
-  border-radius: 50%;
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
 .about-content {
   background: white;
   border-radius: 20px;
@@ -31,7 +22,7 @@
 
   h2 {
     color: #3e528d;
-    font-size: 18px;
+    font-size: 35px;
     margin-bottom: 15px;
     text-align: center;
   }
@@ -50,4 +41,68 @@
   li {
     margin-bottom: 5px;
   }
+}
+
+.about-title {
+  text-align: center;
+  color: #252a2d;
+  font-size: 2.2rem;
+  font-family: "Rocaone", sans-serif;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+
+@media (min-width: 900px) {
+  .about-container {
+    max-width: 1600px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 60px;
+    text-align: left;
+    margin: 0 auto 40px auto;
+    background: #fff;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(37, 42, 45, 0.13);
+    padding: 60px 60px;
+  }
+
+  .about-content {
+    flex: 1 1 0;
+    padding: 0;
+    font-size: 1.18rem;
+    border-radius: 0 32px 32px 0;
+    min-height: 320px;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.about-content ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+.about-content li {
+  text-align: left;
+  list-style: none;
+}
+
+.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+  text-align: center;
+}
+
+.team-list li {
+  margin-bottom: 8px;
+  font-size: 1.08em;
 }

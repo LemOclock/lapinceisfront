@@ -1,0 +1,17 @@
+//http://localhost:1234/login
+
+←→1 of 8 errors on the page
+Data:
+console.<computed> [as error]
+packages/utils/error-overlay/src/listenToRuntimeErrors.js:104:16
+fetchUserBudgets
+src/pages/budget/Budget.jsx:100:16
+   97 |       // Log plus de détails sur l'erreur
+   98 |       if (error.response) {
+   99 |         console.error("Status:", error.response.status);
+> 100 |         console.error("Data:", error.response.data);
+>     |                 ^
+  101 |         console.error("Headers:", error.response.headers);
+  102 | 
+  103 |         // Messages d'erreur spécifiques selon le status
+View compiled

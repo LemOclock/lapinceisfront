@@ -117,6 +117,45 @@
   transition: width 0.3s ease; /* Animation fluide */
 }
 
+/* Recherche et filtrage */
+.search-header {
+  margin-bottom: 15px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  cursor: pointer;
+  font-size: 18px;
+  margin: 0 10px;
+  color: #3e528d;
+  transition: color 0.2s ease;
+}
+
+.search-icon:hover {
+  color: #2a3a6b;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.loading {
+  margin: 0 10px;
+  font-size: 16px;
+}
+
 /* Tableau des transactions */
 .transactions {
   background: #3e528d;
@@ -139,6 +178,12 @@
   color: white;
   padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.table-row:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .table-row:last-child {
@@ -152,6 +197,11 @@
   text-decoration: underline;
   cursor: pointer;
   margin-top: 15px;
+  transition: color 0.2s ease;
+}
+
+.voir-plus:hover {
+  color: #eaa93d;
 }
 
 /* Bouton création de budget */
@@ -165,6 +215,7 @@
   width: 100%;
   font-size: 16px;
   font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .create-budget:hover {
@@ -192,6 +243,12 @@
   width: 90%;
   max-width: 350px;
   position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.search-modal {
+  max-width: 450px;
 }
 
 .modal-close {
@@ -239,13 +296,19 @@
   font-size: 14px;
 }
 
-.modal-form input {
+.modal-form input,
+.modal-form select {
   width: 100%;
   padding: 10px;
   border: none;
   border-radius: 8px;
   background: white;
   box-sizing: border-box;
+  font-size: 14px;
+}
+
+.modal-form select {
+  cursor: pointer;
 }
 
 /* Dropdown catégorie dans la modal */
@@ -295,6 +358,36 @@
   background: #ede5de;
 }
 
+/* Comparaison budget */
+.budget-comparison {
+  margin-top: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.budget-comparison h4 {
+  color: white;
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.budget-comparison p {
+  color: white;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.over-budget {
+  color: #ff6b6b !important;
+  font-weight: bold;
+}
+
+.under-budget {
+  color: #51cf66 !important;
+  font-weight: bold;
+}
+
 .modal-validate {
   background: #3e528d;
   color: white;
@@ -305,6 +398,7 @@
   width: 100%;
   font-size: 16px;
   font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .modal-validate:hover {

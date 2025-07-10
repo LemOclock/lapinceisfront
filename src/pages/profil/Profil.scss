@@ -1,148 +1,61 @@
-.calendrier {
-  display: flex;
-  justify-content: center;
-}
-
-.nomcompteconteneur {
-  display: flex;
-  justify-content: center;
-
-  .nomcompte {
-    width: 6rem;
-    text-align: center;
-    color: white;
-    background-color: #3e528d;
-    border-radius: 1rem;
-    padding: 0.5rem;
-  }
-}
-
-.boutonbudgetconteneur {
-  display: flex;
-  justify-content: center;
-
-  .boutonbudget {
-    margin-top: 1rem;
-  }
-}
-
-// Overlay pour assombrir l'arrière-plan
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+.profil-page{
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-}
+  .profil-container{
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(245, 245, 245);
+    margin: 0.5rem;
+    border-radius: 1rem;
+    padding: 2rem;
+    width: 70%;
+    .profile-photo{
 
-.popup {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  width: 90%;
-  max-width: 400px;
-  position: relative;
-  box-shadow: 0 20px 60px rgba(37, 42, 45, 0.1);
+      .photo-placeholder{
+        background-color: #ede5de;
+        border: 2px dashed #b0a99f;
+        padding: 4rem;
+        border-radius: 50%;
+        position: relative;
 
-  .closepopup {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #252a2d;
-  }
+        .edit-photo{
+          background-color: #ffffff;
+          border: 1px solid #b0a99f;
+          border-radius: 50%;
+          padding: 0.5rem;
+          cursor: pointer;
+          position: absolute;
+          bottom: 0;
+          right: 0;
 
-  .popup-header {
-    background: #3e528d;
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    margin-bottom: 20px;
-
-    h3 {
-      margin: 0;
-      font-size: 16px;
-      font-family: "Rocaone", sans-serif;
-    }
-  }
-
-  .popup-content {
-    h4 {
-      color: #252a2d;
-      margin-bottom: 15px;
-      font-size: 16px;
-      font-family: "Rocaone", sans-serif;
-    }
-
-    .popup-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-
-      .buttonbleu {
-        background: #3e528d;
-        color: white;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 20px;
-        font-size: 14px;
-        cursor: pointer;
-        font-family: "Rocaone", sans-serif;
-
-        &:hover {
-          background: #2a3a6b;
+          &:hover {
+            background-color: #dfd5c9;
+          }
         }
       }
     }
-  }
-}
 
-// Styles du tableau d'opérations
-.tableauoperation {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 15px;
+    .profile-info{
+      margin-top: 2rem;
+      text-align: center;
 
-  th {
-    background: #3e528d;
-    color: white;
-    padding: 12px 8px;
-    text-align: center;
-    font-size: 14px;
-    font-family: "Rocaone", sans-serif;
-    border: none;
-  }
+      .edit-icon{
+         background-color: #ffffff;
+          border: 1px solid #b0a99f;
+          border-radius: 5px;
+          cursor: pointer;
+          &:hover {
+            background-color: #dfd5c9;
+          }
+      }
 
-  td {
-    background: #3e528d;
-    color: white;
-    padding: 10px 8px;
-    text-align: center;
-    font-size: 13px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    &:first-child {
-      text-align: left;
+      .info-container{
+        text-align: left;
+      }
+  
     }
   }
 
-  tbody tr:nth-of-type(even) td {
-    background: #2a3a6b;
-  }
-
-  tbody tr:nth-of-type(odd) td {
-    background: #3e528d;
-  }
 }

@@ -91,9 +91,19 @@ html {
 
         .supressionoperation {
             text-align: right;
-            margin-top: 2rem; 
+            margin-top: 2rem;
 
         }
     }
 
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }

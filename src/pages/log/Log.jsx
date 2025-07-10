@@ -2,13 +2,16 @@ import React from "react";
 import "./Log.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import { login, register } from "../../api/auth";
+import "../../global.scss";
 
 
 
 const Log = () => {
   const Navigate = useNavigate();
+
+  const [registerError, setRegisterError] = useState("");
 
   const [showLogin, setShowLogin] = useState(true);
   const [loginData, setLoginData] = useState({
@@ -27,7 +30,26 @@ const Log = () => {
   const [showAlert, setShowAlert] = useState(false);
 
 
+  // -----------------------------------------------
 
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    minLength: false,
+    minUppercase: false,
+    minLowercase: false,
+    minNumber: false,
+    minSymbol: false,
+  });
+
+  const checkPasswordCriteria = (password) => {
+    return {
+      minLength: password.length >= 12,
+      minUppercase: /[A-Z]/.test(password),
+      minLowercase: /[a-z]/.test(password),
+      minNumber: /[0-9]/.test(password),
+      minSymbol: /[^A-Za-z0-9]/.test(password),
+    };
+  };
+  // -----------------------------------------------
 
 
   const handleChangeLogin = (e) =>
@@ -36,32 +58,57 @@ const Log = () => {
   const handleChangeRegister = (e) =>
     setRegisterData({ ...registerData, [e.target.name]: e.target.value });
 
-
   const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await login(loginData.email, loginData.mot_de_passe);
-      console.log("Login successful:", response.data);
+  e.preventDefault();
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        console.log("Token stocké:", response.data.token);
-        console.log(
-          "Token depuis localStorage:",
-          localStorage.getItem("token")
-        );
-      } else {
-        console.log("Aucun token reçu du serveur");
-      }
+  try {
+    const response = await login(loginData.email, loginData.mot_de_passe);
+    console.log("Login successful:", response.data);
 
-      Navigate(response.data.redirectUrl);
-    } catch (error) {
-      console.error("Login error:", error);
+    if (response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      
+      // Fonction récursive avec setTimeout
+      const handleTokenExpiration = () => {
+        setTimeout(() => {
+          localStorage.removeItem('token');
+          const promptResponse = prompt("Votre session va expiré. Tapez 'oui' pour rester connecté, sinon vous serez déconnecté.");
+          
+          if (promptResponse && promptResponse.toLowerCase() === 'oui') {
+            // Remettre le token et relancer
+            localStorage.setItem("token", response.data.token);
+            handleTokenExpiration(); // Relancer pour 15 secondes de plus
+          } else {
+            Navigate("/login");
+          }
+        },3600000); // 3600000 ms = 1 heure
+      };
+      
+      // Démarrer le timer
+      handleTokenExpiration();
+      
+    } else {
+      console.log("Aucun token reçu du serveur");
     }
-  };
+
+    Navigate(response.data.redirectUrl);
+  } catch (error) {
+    console.error("Login error:", error);
+  }
+};
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    const criteria = checkPasswordCriteria(registerData.mot_de_passe);
+    const allValid = Object.values(criteria).every(Boolean);
+
+    if (!allValid) {
+      setRegisterError("Le mot de passe ne respecte pas tous les critères.");
+      return;
+    } else {
+      setRegisterError("");
+    }
+
     try {
       const response = await register(registerData);
       console.log("Register successful:", response.data);
@@ -82,10 +129,11 @@ const Log = () => {
   return (
     <>
       <div className="log-container">
+
         {showAlert && (
           <div className="alertregister">
             <p>Inscription réussie ! 🎉</p>
-            <p>Vous allez être rediriger.</p>
+            <p>Vous allez être redirigé.</p>
           </div>
         )}
         <div className="logo_container">
@@ -140,7 +188,14 @@ const Log = () => {
         {/* Formulaire Register */}
         {!showLogin && (
           <form onSubmit={handleRegisterSubmit} action="POST" id="register">
-            <label> Nom </label>
+            {registerError &&
+              (
+                <div className="alertregister">
+                  <p>{registerError}</p>
+                </div>
+              )
+            }
+            <label> Nom * </label>
             <input
               type="text"
               name="nom"
@@ -150,7 +205,7 @@ const Log = () => {
               value={registerData.nom}
               required
             />
-            <label> Prénom </label>
+            <label> Prénom * </label>
             <input
               type="text"
               name="prenom"
@@ -160,7 +215,7 @@ const Log = () => {
               value={registerData.prenom}
               required
             />
-            <label> Email </label>
+            <label> Email * </label>
             <input
               type="email"
               name="email"
@@ -170,20 +225,33 @@ const Log = () => {
               onChange={handleChangeRegister}
               required
             />
-            <label> Mot de passe </label>
-            <input
-              type="password"
-              name="mot_de_passe"
-              id="mot_de_passe"
-              placeholder="Mot de passe"
-              value={registerData.mot_de_passe}
-              onChange={handleChangeRegister}
-              required
-            />
+
+            <label> Mot de passe *</label>
+            <div>
+              <input className="password-input"
+                type="password"
+                name="mot_de_passe"
+                id="mot_de_passe"
+                placeholder="Mot de passe"
+                value={registerData.mot_de_passe}
+                onChange={e => {
+                  handleChangeRegister(e);
+                  setPasswordCriteria(checkPasswordCriteria(e.target.value));
+                }}
+                required
+              />
+              <ul className="password-criteria">
+                <li className={passwordCriteria.minLength ? "valid" : "invalid"}>12 caractères</li>
+                <li className={passwordCriteria.minUppercase ? "valid" : "invalid"}>1 majuscule</li>
+                <li className={passwordCriteria.minLowercase ? "valid" : "invalid"}>1 minuscule</li>
+                <li className={passwordCriteria.minNumber ? "valid" : "invalid"}>1 chiffre</li>
+                <li className={passwordCriteria.minSymbol ? "valid" : "invalid"}>1 caractère spécial</li>
+              </ul>
+
+            </div>
 
 
-
-            <label> Numéro de téléphone</label>
+            <label> Numéro de téléphone </label>
             <input
               type="text"
               name="telephone"
@@ -193,8 +261,9 @@ const Log = () => {
               onChange={handleChangeRegister}
             />
             <button type="submit">S'inscrire</button>
-
+            <p>* Champs obligatoire</p>
           </form>
+
         )}
       </div>
       <Footer />

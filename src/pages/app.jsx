@@ -12,6 +12,7 @@ import Landing from "../pages/landing/landing";
 
 function App() {
   return (
+    <div className="page-wrapper">
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -26,6 +27,7 @@ function App() {
         <Route path="/legal" element={<TermsConditions />} />
       </Routes>
     </BrowserRouter>
+    </div>
   );
 }
 
