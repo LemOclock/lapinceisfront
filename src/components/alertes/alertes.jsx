@@ -26,17 +26,21 @@ export default function Alertes() {
         fetchBudgets();
     }, []);
 
+    const hasAlertes = budgets.some(budget => budget.seuil_pourcentage > 50);
+
+    if (!hasAlertes) {
+        return null;
+    }
+
     return (
         <div className='alertesbudgets'>
             <h3>Mes alertes</h3>
             <a href="/budget">
                 <button>Voir les budgets</button>
             </a>
-                {/* probleme de la table alerte on va faire un appel api mais je vois mal l'utilité  */}
-
+            {/* probleme de la table alerte on va faire un appel api mais je vois mal l'utilité  */}
 
             <div className='alertes-container'>
-
                 { budgets.map((budget) => {
                     if (budget.seuil_pourcentage > 50 && budget.seuil_pourcentage <= 80) {
                         return (
@@ -62,7 +66,6 @@ export default function Alertes() {
                     return null;
                 }) }
             </div>
-          
         </div>
     );
 }
