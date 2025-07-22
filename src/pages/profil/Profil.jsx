@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/navbar/Navbar";
+import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import "./Profil.scss";
 import GlobalStyles from "../../global.scss";

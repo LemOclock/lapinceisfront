@@ -1,7 +1,7 @@
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
