@@ -1,8 +1,8 @@
-import React from "react";
+import React, { use } from "react";
 import "./Log.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import { login, register } from "../../api/auth";
 import "../../global.scss";
 
@@ -10,6 +10,9 @@ import "../../global.scss";
 
 const Log = () => {
   const Navigate = useNavigate();
+
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [registerError, setRegisterError] = useState("");
 
@@ -50,7 +53,11 @@ const Log = () => {
     };
   };
   // -----------------------------------------------
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+    const passwordInput = document.getElementById("mot_de_passe");
 
+  };
 
   const handleChangeLogin = (e) =>
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -58,44 +65,27 @@ const Log = () => {
   const handleChangeRegister = (e) =>
     setRegisterData({ ...registerData, [e.target.name]: e.target.value });
 
+
   const handleLoginSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await login(loginData.email, loginData.mot_de_passe);
-    console.log("Login successful:", response.data);
+    try {
+      const response = await login(loginData.email, loginData.mot_de_passe);
+      console.log("Login successful:", response.data);
 
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
       
-      // Fonction récursive avec setTimeout
-      const handleTokenExpiration = () => {
-        setTimeout(() => {
-          localStorage.removeItem('token');
-          const promptResponse = prompt("Votre session va expiré. Tapez 'oui' pour rester connecté, sinon vous serez déconnecté.");
-          
-          if (promptResponse && promptResponse.toLowerCase() === 'oui') {
-            // Remettre le token et relancer
-            localStorage.setItem("token", response.data.token);
-            handleTokenExpiration(); // Relancer pour 15 secondes de plus
-          } else {
-            Navigate("/login");
-          }
-        },3600000); // 3600000 ms = 1 heure
-      };
-      
-      // Démarrer le timer
-      handleTokenExpiration();
-      
-    } else {
-      console.log("Aucun token reçu du serveur");
+
+      } else {
+        console.log("Aucun token reçu du serveur");
+      }
+
+      Navigate(response.data.redirectUrl);
+    } catch (error) {
+      console.error("Login error:", error);
     }
-
-    Navigate(response.data.redirectUrl);
-  } catch (error) {
-    console.error("Login error:", error);
-  }
-};
+  };
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
@@ -173,14 +163,22 @@ const Log = () => {
               value={loginData.email}
             />
             <label> Mot de passe </label>
-            <input
-              type="password"
-              name="mot_de_passe"
-              id="mot_de_passe_login"
-              placeholder="Mot de passe"
-              onChange={handleChangeLogin}
-              value={loginData.mot_de_passe}
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="mot_de_passe"
+                id="mot_de_passe_login"
+                placeholder="Mot de passe"
+                onChange={handleChangeLogin}
+                value={loginData.mot_de_passe}
+              />
+              <img
+                className='logopass'
+                src={showPassword ? "/img/hidden.png" : "/img/eye.png"}
+                alt={showPassword ? "Cacher" : "Afficher"}
+                onClick={togglePasswordVisibility}
+              />
+            </div>
             <button type="submit">Se connecter</button>
           </form>
         )}
@@ -228,18 +226,26 @@ const Log = () => {
 
             <label> Mot de passe *</label>
             <div>
-              <input className="password-input"
-                type="password"
-                name="mot_de_passe"
-                id="mot_de_passe"
-                placeholder="Mot de passe"
-                value={registerData.mot_de_passe}
-                onChange={e => {
-                  handleChangeRegister(e);
-                  setPasswordCriteria(checkPasswordCriteria(e.target.value));
-                }}
-                required
-              />
+              <div className="password-input-container">
+                <input className="password-input"
+                  type={showPassword ? "text" : "password"}
+                  name="mot_de_passe"
+                  id="mot_de_passe"
+                  placeholder="Mot de passe"
+                  value={registerData.mot_de_passe}
+                  onChange={e => {
+                    handleChangeRegister(e);
+                    setPasswordCriteria(checkPasswordCriteria(e.target.value));
+                  }}
+                  required
+                />
+                <img
+                  className='logopass'
+                  src={showPassword ? "/img/hidden.png" : "/img/eye.png"}
+                  alt={showPassword ? "Cacher" : "Afficher"}
+                  onClick={togglePasswordVisibility}
+                />
+              </div>
               <ul className="password-criteria">
                 <li className={passwordCriteria.minLength ? "valid" : "invalid"}>12 caractères</li>
                 <li className={passwordCriteria.minUppercase ? "valid" : "invalid"}>1 majuscule</li>
@@ -261,7 +267,7 @@ const Log = () => {
               onChange={handleChangeRegister}
             />
             <button type="submit">S'inscrire</button>
-            <p>* Champs obligatoire</p>
+            <p className="champs-obligatoires"> * Champs obligatoires</p>
           </form>
 
         )}

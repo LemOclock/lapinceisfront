@@ -1,0 +1,41 @@
+.token-warning-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 2%;
+    left: 2%;
+    z-index: 1000000;
+    animation: fadeIn 1s ease-in-out;
+
+    @media screen and (max-width: 700px) {
+        top: 1%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        font-size: 0.8rem;
+        width: 80%;
+        
+    }
+
+    .token-warning-popup {
+        font-family: RocaBold;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #c8321f;
+        color: white;
+        border-radius: 1rem;
+        
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+    
+}

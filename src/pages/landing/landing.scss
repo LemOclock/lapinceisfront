@@ -1,56 +1,52 @@
-.button-container{
-display: flex;
-justify-content: center;
-.buttonjoin{
+.button-container {
+  display: flex;
+  justify-content: center;
+  .buttonjoin {
     width: 400px;
     text-decoration: none;
     text-align: center;
-}
+  }
 }
 
 .camembert-container {
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin: 0 auto;
-
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin: 0 auto;
 }
 
 .calendar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
 
-    img {
-        width: 100%;
-        height: auto;
-        max-width: 900px;
-        min-width: 350px;
-    }
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 900px;
+    min-width: 350px;
+  }
 }
 .progressbarfeatures-container {
-    @media screen and (min-width: 1000px) {
-        display: flex;
-        align-items: center;
-        
-    }
+  @media screen and (min-width: 1000px) {
+    display: flex;
+    align-items: center;
+  }
 
-
-    .progressbar-container {
+  .progressbar-container {
     width: 100%;
     height: auto;
     max-width: 800px;
     margin-top: 1rem;
     margin-bottom: 1rem;
+  }
 }
 
-}
-
-.lapince{
-    color: #C8321F;
-    font-weight: bold;
-    font-size: 1.2rem;
+.lapince {
+  color: #c8321f;
+  font-weight: bold;
+  font-size: 1.2rem;
 }

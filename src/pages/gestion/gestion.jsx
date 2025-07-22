@@ -1,7 +1,7 @@
 import "./gestion.scss";
 import "../../global.scss";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Footer from "../../components/Footer/footer";
 import { Calendar, momentLocalizer, Navigate } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/fr";
@@ -90,13 +90,25 @@ export default function Gestion() {
 
     return (
       <div className="rbc-toolbar">
-        <button onClick={goToPrev}>Préc</button>
+        <button className="calendar-arrow" onClick={goToPrev} aria-label="Semaine précédente">
+                &#8592;
+            </button>
         <span>{label}</span>
-        <button onClick={goToNext}>Suiv</button>
+        <button className="calendar-arrow" onClick={goToNext} aria-label="Semaine suivante">
+                &#8594;
+            </button>
         <button onClick={goToCurrent}>Aujourd'hui</button>
+
+        
+      
+            
       </div>
     );
   };
+  
+  function isSameMonth(date1, date2) {
+  return moment(date1).isSame(moment(date2), 'month');
+}
 
   const CustomDateCellWrapper = ({ children, value }) => {
     // Filtrer les opérations pour cette date spécifique SEULEMENT
@@ -105,6 +117,16 @@ export default function Gestion() {
       return operation.date.toDateString() === value.toDateString();
     });
     
+    // Vérifier si la date est en dehors de la plage sélectionnée
+    const isOffRange = !isSameMonth(currentDate, value);
+    const isToday = new Date().toDateString() === value.toDateString();
+  
+  // Classes combinées
+  const cellClasses = `custom-date-cell-wrapper 
+    ${isOffRange ? 'is-off-month' : ''} 
+    ${isToday ? 'is-today' : ''}`;
+
+
 
     const handleClick = () => {
       const slotInfo = { start: value }
@@ -116,7 +138,7 @@ export default function Gestion() {
 
 
     return (
-      <div className="custom-date-cell-wrapper" onTouchStart={handleClick} onClick={handleClick}>
+      <div className={cellClasses} onTouchStart={handleClick} onClick={handleClick}>
       
         {/* Afficher SEULEMENT les opérations de cette date */}
         {dayOperations.length > 0 && (
@@ -198,6 +220,7 @@ export default function Gestion() {
         <div className="nomcompteconteneur">
           <h1 className="nomcompte">Epargne</h1>
         </div>
+          <p className="description-calendar">Cliquer sur une date pour voir, ajouter ou modifier une opération.</p>
         <div className="calendrier">
           <Calendar
             selectable={true}
@@ -222,6 +245,13 @@ export default function Gestion() {
           />
 
 
+        </div>
+        <div className="boutonbudgetconteneur">
+          <a href="/budget">
+          <button className="buttonbleu boutonbudget">
+            ACCEDER A VOS BUDGETS
+          </button>
+          </a>
         </div>
 
         {popupInfo && (
@@ -338,11 +368,7 @@ export default function Gestion() {
 
 
 
-        <div className="boutonbudgetconteneur">
-          <button className="buttonbleu boutonbudget">
-            ACCEDER A VOS BUDGETS
-          </button>
-        </div>
+        
       </main >
       <Footer />
     </>

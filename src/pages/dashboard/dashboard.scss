@@ -19,7 +19,7 @@
     .rbc-time-column {
         display: none; // Cache la colonne des heures
     }
-    
+
 }
 
 .rbc-time-slot {
@@ -45,8 +45,39 @@
 
 
     .rbc-calendar {
+        max-width: 1300px;
         width: 100%;
         border: none !important;
+
+
+
+        .custom-date-cell-wrapper.is-today {
+            background-color: #be8d86 !important; // Couleur jaune/orange pour le jour actuel
+            border: 2px solid #C8321F !important; // Bordure orange plus foncé
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.5) !important; // Effet brillant
+
+            // En option: ajouter un petit indicateur "Aujourd'hui"
+            position: relative;
+
+            &::after {
+                content: "Aujourd'hui";
+                position: absolute;
+                bottom: -20px;
+                right: 50%;
+                transform: translate(50%);
+                font-size: 14px;
+                background: #C8321F;
+                color: white;
+                padding: 2px 4px;
+                border-radius: 5px;
+                opacity: 0.9;
+
+                @media screen and (max-width: 700px) {
+                    font-size: 10px;
+                    bottom: -15px;
+                }
+            }
+        }
 
         * {
             border: none !important;
@@ -60,7 +91,12 @@
             .rbc-toolbar-label {
                 display: flex;
                 justify-content: center;
-                font-size: 0.6rem;
+                font-size: 1rem;
+
+                @media screen and (max-width: 700px) {
+                    font-size: 0.6rem;
+                    
+                }
             }
 
         }
@@ -75,16 +111,22 @@
                 margin-left: 0.1rem;
                 margin-right: 0.1rem;
                 height: 3rem;
+
                 .date {
                     display: flex;
                     justify-content: center;
-                    font-weight: bold;
-                    font-size: 0.4rem;
+                    font-size: 0.6rem;
                     position: absolute;
                     top: 0;
                     right: 50%;
                     transform: translateX(50%);
-                    color: #333;
+                    color: #000000;
+
+                    @media screen and (max-width: 700px) {
+                        font-size: 0.5rem;
+                        
+                        
+                    }
                 }
             }
         }
@@ -110,12 +152,6 @@
 .container-title {
     display: flex;
     justify-content: center;
-
-}
-
-.nomaccount {
-    width: 10%;
-
 
 }
 
@@ -156,6 +192,34 @@
     height: 0; // Réduit la hauteur à zéro
 }
 
-.rbc-allday-cell{
+.rbc-allday-cell {
     min-height: 4rem;
+}
+
+.container-doughnut {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+
+    .doughnut {
+        width: 100%;
+        max-width: 600px; // Ajustez la largeur maximale selon vos besoins
+        height: auto; // Permet à la hauteur de s'ajuster automatiquement
+    }
+}
+
+
+
+@media (max-width: 700px) {
+    .container-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.7rem;
+
+        button {
+            width: 100%;
+            margin: 0 auto;
+        }
+    }
 }

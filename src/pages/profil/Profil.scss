@@ -1,61 +1,82 @@
-.profil-page{
+.profil-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  .profil-container{
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(245, 245, 245);
-    margin: 0.5rem;
-    border-radius: 1rem;
-    padding: 2rem;
-    width: 70%;
-    .profile-photo{
+}
 
-      .photo-placeholder{
-        background-color: #ede5de;
-        border: 2px dashed #b0a99f;
-        padding: 4rem;
-        border-radius: 50%;
-        position: relative;
+.profil-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(245, 245, 245);
+  margin: 0.5rem;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 70%;
 
-        .edit-photo{
-          background-color: #ffffff;
-          border: 1px solid #b0a99f;
-          border-radius: 50%;
-          padding: 0.5rem;
-          cursor: pointer;
-          position: absolute;
-          bottom: 0;
-          right: 0;
+  .profile-info {
+    text-align: center;
 
-          &:hover {
-            background-color: #dfd5c9;
-          }
-        }
+    .edit-icon {
+      background-color: #ffffff;
+      border: 1px solid #b0a99f;
+      border-radius: 5px;
+      cursor: pointer;
+      &:hover {
+        background-color: #dfd5c9;
       }
     }
 
-    .profile-info{
-      margin-top: 2rem;
-      text-align: center;
-
-      .edit-icon{
-         background-color: #ffffff;
-          border: 1px solid #b0a99f;
-          border-radius: 5px;
-          cursor: pointer;
-          &:hover {
-            background-color: #dfd5c9;
-          }
-      }
-
-      .info-container{
-        text-align: left;
-      }
-  
+    .info-container {
+      text-align: left;
     }
   }
+}
 
+/* Desktop layout: profile-info à gauche, settings-section à droite */
+@media screen and (min-width: 1000px) {
+  .profil-container {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .profile-info {
+    width: 45%;
+    margin-top: 0;
+    margin-right: 2rem;
+  }
+
+  .settings-section {
+    width: 45%;
+    margin-left: 2rem;
+  }
+}
+
+.delete-account {
+  background-color: #c8321f;
+  color: white;
+  border: none;
+  gap: 0.5rem;
+  padding: 0.3rem 0.3rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.logout-account {
+  background-color: #c8321f;
+  color: rgb(255, 255, 255);
+  border: none;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  display: block;
+  margin: 2rem auto 0 auto;
+}
+
+.button-rouge {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }

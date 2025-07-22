@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/footer/footer";
+import Navbar from "../../components/navbar/Navbar";
+import Footer from "../../components/Footer/footer";
 import "./Profil.scss";
 import GlobalStyles from "../../global.scss";
-import { getUtilisateurById } from "../../api/profil";
+import { getUtilisateurById, deleteUtilisateurAccount } from "../../api/profil";
+import { useNavigate } from "react-router-dom";
 
 export const Profil = () => {
   const [notifications, setNotifications] = useState({
@@ -32,10 +33,12 @@ export const Profil = () => {
     { label: "Prénom : ", value: userData.prenom },
     { label: "Email : ", value: userData.email },
     { label: "Date de création : ", value: userData.createdAt },
-    { label: "Numéro de téléphone : ", value: userData.telephone || "Non renseigné" },
+    {
+      label: "Numéro de téléphone : ",
+      value: userData.telephone || "Non renseigné",
+    },
   ];
-
-
+  const navigate = useNavigate();
   const toggleNotification = (type) =>
     setNotifications((prev) => ({ ...prev, [type]: !prev[type] }));
 
@@ -44,10 +47,20 @@ export const Profil = () => {
     setShowDeleteConfirmModal(true);
   };
 
-  const handleFinalDelete = () => {
-    alert("Compte définitivement supprimé !");
-    setShowDeleteConfirmModal(false);
-    setDeleteConfirmText("");
+  const handleFinalDelete = async () => {
+    try {
+      const userId = decodeToken(localStorage.getItem("token"));
+      await deleteUtilisateurAccount(userId);
+      alert("Compte définitivement supprimé !");
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    } catch (error) {
+      alert("Erreur lors de la suppression du compte !");
+      console.error(error);
+    } finally {
+      setShowDeleteConfirmModal(false);
+      setDeleteConfirmText("");
+    }
   };
 
   const handlePasswordSubmit = () => {
@@ -64,14 +77,12 @@ export const Profil = () => {
     setPasswordData((prev) => ({ ...prev, [field]: value }));
   };
 
-
-
   const decodeToken = (token) => {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const payload = JSON.parse(atob(token.split(".")[1]));
       console.log("Payload:", payload);
 
-      return payload.id
+      return payload.id;
     } catch (error) {
       console.error("Erreur lors du décodage du token :", error);
       return null;
@@ -79,8 +90,6 @@ export const Profil = () => {
   };
 
   const handleUserInfos = async () => {
-
-
     try {
       const userId = decodeToken(localStorage.getItem("token"));
       console.log("User ID:", userId);
@@ -94,16 +103,20 @@ export const Profil = () => {
         prenom: response.data.prenom,
         email: response.data.email,
         telephone: response.data.telephone,
-        createdAt: new Date(response.data.createdAt).toLocaleDateString("fr-FR", {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        })
+        createdAt: new Date(response.data.createdAt).toLocaleDateString(
+          "fr-FR",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }
+        ),
       });
-
-    }
-    catch (error) {
-      console.error("Erreur lors de la récupération des informations utilisateur :", error);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération des informations utilisateur :",
+        error
+      );
     }
   };
 
@@ -116,19 +129,11 @@ export const Profil = () => {
       <Navbar />
       <div className="profil-page">
         <div className="profil-container">
-          <div className="profile-photo">
-            <div className="photo-placeholder">
-              <button className="edit-photo">✏️</button>
-            </div>
-          </div>
-
           <div className="profile-info">
             <h2>
               Profil <button className="edit-icon">✏️</button>
             </h2>
             <div className="info-container">
-
-
               {userInfo.map((info, index) => (
                 <div key={index} className="info-row">
                   <span>{info.label}</span>
@@ -158,15 +163,28 @@ export const Profil = () => {
                 </button>
               </div>
             ))}
-            <button
-              className="delete-account"
-              onClick={() => setShowDeleteModal(true)}
-            >
-              Supprimer son compte
-            </button>
+
+            <div className="button-rouge">
+              <button
+                className="delete-account"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Supprimer son compte
+              </button>
+
+              <button
+                className="logout-account"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/");
+                }}
+                style={{ marginTop: "1rem" }}
+              >
+                Se déconnecter
+              </button>
+            </div>
           </div>
         </div>
-
         {/* Première modale de suppression */}
         {showDeleteModal && (
           <div
@@ -182,7 +200,10 @@ export const Profil = () => {
               </button>
               <div className="modal-body">
                 <p>Êtes vous sûres de vouloir supprimer votre compte ?</p>
-                <button className="confirm-delete" onClick={handleDeleteAccount}>
+                <button
+                  className="confirm-delete"
+                  onClick={handleDeleteAccount}
+                >
                   Supprimer
                 </button>
               </div>
@@ -227,9 +248,7 @@ export const Profil = () => {
 
         {/* Modale changement mot de passe */}
         {showPasswordModal && (
-          <div
-            className="modal-overlay"
-          >
+          <div className="modal-overlay">
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <button
                 className="modal-close"

@@ -27,3 +27,6 @@ export const deleteOperationAccount = (operationId) =>
 
 export const getOperationsByMonth = (month, year) =>
     api.get(`/operations/account/month?month=${month}&year=${year}`);
+
+export const getOperationsByIdAccount = (compteId) =>
+    api.get(`/operations/account/${compteId}`);

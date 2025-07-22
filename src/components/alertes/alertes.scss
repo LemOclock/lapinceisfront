@@ -1,0 +1,88 @@
+.alertesbudgets {
+    background-color: #ede5de;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 10%;
+    right: 1%;
+    width: 35%;
+    border-radius: 1rem;
+    z-index: 1000;
+
+    @media screen and (max-width: 700px) {
+        width: 90%;
+        top: 5%;
+        right: 5%;
+        
+    }
+
+
+    .alertes-container {
+        max-height: calc(3 * 60px);
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        &::-webkit-scrollbar {
+            width: 12px;
+           
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+            
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+
+            &:hover {
+                background: #a8a8a8;
+            }
+        }
+    }
+
+
+    a {
+        align-self: center;
+        margin-bottom: 0.5rem;
+        button {
+            font-family: RocaThin;
+            background-color: #ffffff;
+            color: black;
+            border: 1px solid #d3d3d3;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+                background-color: #d3d3d3;
+            }
+        }
+    }
+
+    h3 {
+        text-align: center;
+        color: #000000;
+    }
+
+    p {
+        padding: 0.5rem;
+        color: white;
+        border-radius: 0.5rem;
+    }
+
+    .low-alert {
+        background-color: green;
+    }
+
+    .medium-alert {
+        background-color: orange;
+    }
+
+    .high-alert {
+        background-color: #c8321f;
+    }
+}

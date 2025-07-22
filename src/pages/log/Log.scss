@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 }
 
 // Styles pour les labels
@@ -59,9 +60,8 @@
 #password_login,
 #nom,
 #prenom,
-#email_register
-{
-margin-bottom: 1px;
+#email_register {
+  margin-bottom: 1px;
 }
 
 // Styles pour les boutons
@@ -172,6 +172,7 @@ margin-bottom: 1px;
   75% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -197,4 +198,33 @@ margin-bottom: 1px;
 
 .password-input {
   margin-bottom: 0;
+}
+
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+  
+  .password-input {
+    width: 100%;
+    padding-right: 40px; // Espace pour l'icône
+  }
+  
+  .logopass {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    cursor: pointer;
+    z-index: 2;
+  }
+}
+.champs-obligatoires {
+  font-size: 0.8rem;
+  text-align: left;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+ 
 }
