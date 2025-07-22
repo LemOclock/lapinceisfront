@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import "./AccountConfig.scss";
 import { accountConfig } from "../../api/accountConfig";
 import { useNavigate } from "react-router-dom";
-import "../../global.scss"; 
-
-
-
+import "../../global.scss";
 
 const AccountConfig = () => {
   const navigate = useNavigate();
@@ -23,18 +20,16 @@ const AccountConfig = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('🚀 Données envoyées:', allData);
+    console.log("🚀 Données envoyées:", allData);
 
     try {
       const response = await accountConfig(allData);
-      console.log('Register successful:', response.data);
-      navigate('/dashboard'); // Redirige vers la page de tableau de bord ou une autre page spécifiée
+      console.log("Register successful:", response.data);
+      navigate("/dashboard"); // Redirige vers la page de tableau de bord ou une autre page spécifiée
     } catch (error) {
-      console.error('Register error:', error);
+      console.error("Register error:", error);
     }
   };
-
-
 
   return (
     <div className="account-config-page">
@@ -85,7 +80,12 @@ const AccountConfig = () => {
             <div className="form-group">
               <label>Devise</label>
               <div className="currency-selector">
-                <select name="devise" className="currency-button" onChange={handleChange} value={allData.devise}>
+                <select
+                  name="devise"
+                  className="currency-button"
+                  onChange={handleChange}
+                  value={allData.devise}
+                >
                   <option value="EUR">EUR €</option>
                   <option value="USD">USD $</option>
                   <option value="GBP">GBP £</option>

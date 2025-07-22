@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../../components/navbar/navbar";
-import Footer from "../../components/Footer/footer";
+import Footer from "../../components/footer/footer";
 import "./About.scss";
 import "../../global.scss";
 
@@ -12,8 +12,6 @@ const About = () => {
       <h1 className="about-title">À propos</h1>
 
       <div className="about-container">
-
-
         <div className="about-content">
           <h2>Une application pensée pour vous, pas pour les experts</h2>
 
@@ -69,13 +67,19 @@ const About = () => {
             plus humaine, plus simple, et plus efficace.
           </p>
           <ul className="team-list">
-            <li><strong>Lead dev front :</strong> Andy </li>
-            <li><strong>Lead dev back :</strong> Isahia</li>
-            <li><strong>Product Owner :</strong> Benoit</li>
-            <li><strong>Scrum Master :</strong> Elyes</li>
+            <li>
+              <strong>Lead dev front :</strong> Andy{" "}
+            </li>
+            <li>
+              <strong>Lead dev back :</strong> Isahia
+            </li>
+            <li>
+              <strong>Product Owner :</strong> Benoit
+            </li>
+            <li>
+              <strong>Scrum Master :</strong> Elyes
+            </li>
           </ul>
-
-
         </div>
       </div>
 
