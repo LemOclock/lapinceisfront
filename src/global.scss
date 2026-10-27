@@ -103,3 +103,13 @@ html {
     display: flex;
     flex-direction: column;
 }
+
+// Message d'erreur renvoyé par l'API dans les formulaires
+.form-error {
+    color: #C8321F;
+    background-color: #fdecea;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    margin: 0 0 1rem;
+}

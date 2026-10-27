@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Footer from "../../components/footer/footer";
 import "./AccountConfig.scss";
 import { accountConfig } from "../../api/accountConfig";
+import { getErrorMessage } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import "../../global.scss";
 
@@ -14,20 +15,25 @@ const AccountConfig = () => {
     devise: "EUR",
   });
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) =>
     setAllData({ ...allData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("🚀 Données envoyées:", allData);
+    setError("");
 
     try {
-      const response = await accountConfig(allData);
-      console.log("Register successful:", response.data);
-      navigate("/dashboard"); // Redirige vers la page de tableau de bord ou une autre page spécifiée
-    } catch (error) {
-      console.error("Register error:", error);
+      await accountConfig(allData);
+      navigate("/dashboard");
+    } catch (err) {
+      // Un compte existe déjà : on va directement au tableau de bord
+      if (err.response?.status === 409) {
+        navigate("/dashboard");
+        return;
+      }
+      setError(getErrorMessage(err, "Impossible de créer le compte."));
     }
   };
 
@@ -36,7 +42,7 @@ const AccountConfig = () => {
       <div className="account-config-container">
         <div className="account-config-card">
           <div className="logo">
-            <img src="../../img/logo.png" alt="La Pince" />
+            <img src="/img/logo.png" alt="La Pince" />
           </div>
 
           <div className="page-title">
@@ -44,6 +50,7 @@ const AccountConfig = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
+            {error && <p className="form-error" role="alert">{error}</p>}
             <div className="form-group">
               <label>Nom</label>
               <input

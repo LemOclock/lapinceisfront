@@ -39,7 +39,7 @@ export default function Landing() {
           financières en toute confiance.
         </p>
         <div className="calendar-container">
-          <img src="../../img/TableauGestion.png" alt="calendrier" />
+          <img src="/img/TableauGestion.png" alt="calendrier" />
         </div>
         <div className="progressbarfeatures-container">
           <div className="progressbar-container">

@@ -7,16 +7,6 @@ export const updateBudget = (budgetId, budgetData) =>
   api.put(`/budgets/${budgetId}`, budgetData);
 export const deleteBudget = (budgetId) => api.delete(`/budgets/${budgetId}`);
 
-// Opérations
+// Opérations (dépenses) rattachées à un budget
 export const getOperations = (filters) =>
   api.get("/operations/budget", { params: filters });
-// export const searchOperations = (searchQuery, budgetId) =>
-//   api.get("/operations/budget/search", {
-//     params: {
-//       search: searchQuery,
-//       budget_id: budgetId,
-//     },
-//   });
-
-export const searchOperations = (month, year) =>
-  api.get(`/operations/account/month?month=${month}&year=${year}`);

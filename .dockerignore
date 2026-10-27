@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-check
+.parcel-cache
+.env
+.git
+.vscode
+Dockerfile
+.dockerignore

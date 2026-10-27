@@ -8,11 +8,17 @@ import "moment/locale/fr";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState, useEffect } from "react";
 import { GestionDepense, GestionRevenu } from "../../components/gestionoperation/gestionoperation";
-import { getOperationByDate, getOperationsByMonth } from "../../api/gestion";
+import { getOperationByDate, getOperationsByMonth, findCompteId } from "../../api/gestion";
 import GestionModifyDeleteOperation from "../../components/gestionmodifydeleteoperation/gestionmodifydeleteoperation";
 
 
 const localizer = momentLocalizer(moment);
+
+// Date "AAAA-MM-JJ" -> Date locale (évite le décalage UTC de new Date("AAAA-MM-JJ"))
+const parseLocalDate = (value) => {
+  const [year, month, day] = String(value).slice(0, 10).split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
 
 // Fonction pour mettre en surbrillance le jour actuel
 const dayPropGetter = (date) => {
@@ -41,6 +47,13 @@ export default function Gestion() {
   const [selectedOperation, setSelectedOperation] = useState(null)
   const [operationByDate, setOperationByDate] = useState([]);
   const [monthlyOperations, setMonthlyOperations] = useState([]);
+  const [nomCompte, setNomCompte] = useState("");
+
+  useEffect(() => {
+    findCompteId()
+      .then((response) => setNomCompte(response.data.nom_compte))
+      .catch((error) => console.error("Erreur compte :", error));
+  }, []);
 
   const loadMonthlyOperations = async () => {
     const month = currentDate.getMonth() + 1;
@@ -48,18 +61,16 @@ export default function Gestion() {
 
     try {
       const operations = await getOperationsByMonth(month, year);
-      console.log("Opérations du mois récupérées :", operations.data);
 
       const operationEvents = operations.data.map(operation => ({
         id: operation.id,
-        date: new Date(operation.date_operation),
+        date: parseLocalDate(operation.date_operation),
         icone: operation.Categorie?.icone || '💰',
         nom: operation.nom_operation,
         montant: operation.montant_operation
       }));
 
       setMonthlyOperations(operationEvents);
-      console.log('toute les op' + operationEvents);
 
     } catch (error) {
       console.error("Erreur:", error);
@@ -73,20 +84,9 @@ export default function Gestion() {
 
   // Toolbar pour le calendrier (Précédent, Suivant, Aujourd'hui)
   const CustomToolbar = ({ onNavigate, label }) => {
-    const goToCurrent = () => {
-      const today = new Date();
-      setCurrentDate(today);
-      loadMonthlyOperations();
-      onNavigate(Navigate.TODAY);
-    };
-    const goToNext = () => {
-      onNavigate(Navigate.NEXT);
-      loadMonthlyOperations();
-    };
-    const goToPrev = () => {
-      onNavigate(Navigate.PREVIOUS);
-      loadMonthlyOperations();
-    };
+    const goToCurrent = () => onNavigate(Navigate.TODAY);
+    const goToNext = () => onNavigate(Navigate.NEXT);
+    const goToPrev = () => onNavigate(Navigate.PREVIOUS);
 
     return (
       <div className="rbc-toolbar">
@@ -181,12 +181,9 @@ export default function Gestion() {
     const dateFormat = new Intl.DateTimeFormat("fr-CA", options).format(date)
 
     try {
-      console.log("test");
       const response = await getOperationByDate(dateFormat);
-      console.log(response);
 
       setOperationByDate(response.data);
-      console.log("Opérations récupérées par date :", response.data);
 
       setPopupInfo({
         date: slotInfo.start.toLocaleDateString("fr"), //  02/07/2024
@@ -201,7 +198,6 @@ export default function Gestion() {
 
 
   const modifyPopup = (operation) => {
-    console.log("Ouverture du popup de modification pour:", operation);
     setShowModifyDeleteModal(true)
     setSelectedOperation(operation)
 
@@ -218,7 +214,7 @@ export default function Gestion() {
       <Navbar />
       <main>
         <div className="nomcompteconteneur">
-          <h1 className="nomcompte">Epargne</h1>
+          <h1 className="nomcompte">{nomCompte}</h1>
         </div>
           <p className="description-calendar">Cliquer sur une date pour voir, ajouter ou modifier une opération.</p>
         <div className="calendrier">
@@ -275,19 +271,21 @@ export default function Gestion() {
                     </tr>
                   </thead>
                   <tbody>
-                    {operationByDate.map((operation, index) => (
+                    {operationByDate.map((operation) => (
                       <tr
-                        key={index}
+                        key={operation.id}
                         onClick={() => { modifyPopup(operation) }}
                       >
                         <td>{operation.nom_operation}</td>
-                        <td>{operation.montant_operation}</td>
+                        <td>{parseFloat(operation.montant_operation).toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €</td>
                         <td> {operation.Categorie?.icone} {operation.Categorie?.nom_categorie}</td>
                       </tr>
                     ))}
-                    {/* { operationByDate.map == "" && 
-
-                    } */}
+                    {operationByDate.length === 0 && (
+                      <tr>
+                        <td colSpan="3">Aucune opération ce jour-là</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
 
@@ -331,7 +329,6 @@ export default function Gestion() {
             onClose={closeModifyPopup}
             dateFR={popupInfo ? popupInfo.date : dateFR}
             onModify={() => {
-              console.log("Opération modifiée avec succès");
               loadMonthlyOperations()
             }}
 
@@ -345,7 +342,6 @@ export default function Gestion() {
             selectedDate={popupInfo ? popupInfo.dateUS : selectedDate}
             onClose={() => setShowAddExpenseModalDepense(false)}
             onExpenseAdded={() => {
-              console.log("Dépense ajoutée avec succès");
               loadMonthlyOperations();
             }}
             dateFR={popupInfo ? popupInfo.date : dateFR}
@@ -358,7 +354,6 @@ export default function Gestion() {
             selectedDate={popupInfo ? popupInfo.dateUS : selectedDate}
             onClose={() => setShowAddExpenseModalRevenu(false)}
             onExpenseAdded={() => {
-              console.log("Revenu ajoutée avec succès");
               loadMonthlyOperations();
             }}
             dateFR={popupInfo ? popupInfo.date : dateFR}

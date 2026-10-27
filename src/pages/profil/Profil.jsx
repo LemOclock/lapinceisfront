@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Footer from "../../components/footer/footer";
 import "./Profil.scss";
-import GlobalStyles from "../../global.scss";
-import { getUtilisateurById, deleteUtilisateurAccount } from "../../api/profil";
+import "../../global.scss";
+import { getMe, updatePassword as updatePasswordApi, deleteMyAccount } from "../../api/profil";
+import { getErrorMessage } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 
 export const Profil = () => {
@@ -27,6 +28,8 @@ export const Profil = () => {
     confirm: "",
   });
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
   const userInfo = [
     { label: "Nom : ", value: userData.nom },
@@ -48,61 +51,48 @@ export const Profil = () => {
   };
 
   const handleFinalDelete = async () => {
+    setDeleteError("");
     try {
-      const userId = decodeToken(localStorage.getItem("token"));
-      await deleteUtilisateurAccount(userId);
-      alert("Compte définitivement supprimé !");
+      await deleteMyAccount();
       localStorage.removeItem("token");
+      alert("Compte définitivement supprimé !");
       window.location.href = "/";
     } catch (error) {
-      alert("Erreur lors de la suppression du compte !");
-      console.error(error);
+      setDeleteError(getErrorMessage(error, "Erreur lors de la suppression du compte."));
     } finally {
-      setShowDeleteConfirmModal(false);
       setDeleteConfirmText("");
     }
   };
 
-  const handlePasswordSubmit = () => {
+  const handlePasswordSubmit = async () => {
+    setPasswordError("");
     if (passwordData.new !== passwordData.confirm) {
-      alert("Les mots de passe ne correspondent pas !");
+      setPasswordError("Les mots de passe ne correspondent pas.");
       return;
     }
-    alert("Mot de passe changé !");
-    setShowPasswordModal(false);
-    setPasswordData({ current: "", new: "", confirm: "" });
+    try {
+      await updatePasswordApi(passwordData.current, passwordData.new);
+      alert("Mot de passe changé !");
+      setShowPasswordModal(false);
+      setPasswordData({ current: "", new: "", confirm: "" });
+    } catch (error) {
+      setPasswordError(getErrorMessage(error, "Impossible de changer le mot de passe."));
+    }
   };
 
   const updatePassword = (field, value) => {
     setPasswordData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const decodeToken = (token) => {
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      console.log("Payload:", payload);
-
-      return payload.id;
-    } catch (error) {
-      console.error("Erreur lors du décodage du token :", error);
-      return null;
-    }
-  };
-
   const handleUserInfos = async () => {
     try {
-      const userId = decodeToken(localStorage.getItem("token"));
-      console.log("User ID:", userId);
-
-      const response = await getUtilisateurById(userId);
-
-      console.log(response.data);
+      const response = await getMe();
 
       setUserData({
         nom: response.data.nom,
         prenom: response.data.prenom,
         email: response.data.email,
-        telephone: response.data.telephone,
+        telephone: response.data.numero_telephone,
         createdAt: new Date(response.data.createdAt).toLocaleDateString(
           "fr-FR",
           {
@@ -228,6 +218,7 @@ export const Profil = () => {
                 <p>
                   Pour confirmer la suppression, tapez "Supprimer mon compte" :
                 </p>
+                {deleteError && <p className="form-error" role="alert">{deleteError}</p>}
                 <input
                   type="text"
                   value={deleteConfirmText}
@@ -252,13 +243,17 @@ export const Profil = () => {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <button
                 className="modal-close"
-                onClick={() => setShowPasswordModal(false)}
+                onClick={() => {
+                  setShowPasswordModal(false);
+                  setPasswordError("");
+                }}
               >
                 ×
               </button>
 
               <div className="password-modal">
                 <h3>Confirmation du changement du mot de passe</h3>
+                {passwordError && <p className="form-error" role="alert">{passwordError}</p>}
 
                 <div className="password-form">
                   <label>Mot de passe actuel :</label>

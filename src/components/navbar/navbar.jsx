@@ -15,7 +15,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="logonavbar">
         <a href="/">
-          <img src="../../img/logo.png" alt="Logo" />
+          <img src="/img/logo.png" alt="Logo" />
         </a>
       </div>
       {!isLoggedIn && (

@@ -1,9 +1,10 @@
-import React, { use } from "react";
+import React from "react";
 import "./Log.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/footer/footer";
 import { login, register } from "../../api/auth";
+import { getErrorMessage } from "../../api/api";
 import "../../global.scss";
 
 
@@ -15,6 +16,7 @@ const Log = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [registerError, setRegisterError] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   const [showLogin, setShowLogin] = useState(true);
   const [loginData, setLoginData] = useState({
@@ -27,7 +29,7 @@ const Log = () => {
     prenom: "",
     email: "",
     mot_de_passe: "",
-    telephone: "",
+    numero_telephone: "",
   });
 
   const [showAlert, setShowAlert] = useState(false);
@@ -55,8 +57,6 @@ const Log = () => {
   // -----------------------------------------------
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-    const passwordInput = document.getElementById("mot_de_passe");
-
   };
 
   const handleChangeLogin = (e) =>
@@ -68,22 +68,21 @@ const Log = () => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setLoginError("");
 
     try {
       const response = await login(loginData.email, loginData.mot_de_passe);
-      console.log("Login successful:", response.data);
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      
-
-      } else {
-        console.log("Aucun token reçu du serveur");
+      if (!response.data.token) {
+        setLoginError("Aucun token reçu du serveur.");
+        return;
       }
 
-      Navigate(response.data.redirectUrl);
+      localStorage.setItem("token", response.data.token);
+      // Rechargement complet pour que la barre de navigation et l'expiration du token soient à jour
+      window.location.href = response.data.redirectUrl || "/dashboard";
     } catch (error) {
-      console.error("Login error:", error);
+      setLoginError(getErrorMessage(error, "Connexion impossible."));
     }
   };
 
@@ -100,19 +99,19 @@ const Log = () => {
     }
 
     try {
-      const response = await register(registerData);
-      console.log("Register successful:", response.data);
+      await register(registerData);
 
       setShowAlert(true);
+      setLoginData({ email: registerData.email, mot_de_passe: "" });
 
-      // Masquer l'alerte après 3 secondes
+      // Masquer l'alerte et retourner au login
       setTimeout(() => {
         setShowAlert(false);
-        setShowLogin(true); // Retourner au login
-      }, 5000);
+        setShowLogin(true);
+      }, 3000);
 
     } catch (error) {
-      console.error("Register error:", error);
+      setRegisterError(getErrorMessage(error, "Inscription impossible."));
     }
   };
 
@@ -152,10 +151,16 @@ const Log = () => {
 
         {/* Formulaire Login */}
         {showLogin && (
-          <form onSubmit={handleLoginSubmit} action="POST" id="login">
+          <form onSubmit={handleLoginSubmit} id="login">
+            {loginError && (
+              <div className="alertregister">
+                <p>{loginError}</p>
+              </div>
+            )}
             <label> Email </label>
             <input
-              type="text"
+              type="email"
+              required
               name="email"
               id="email_login"
               placeholder="Email"
@@ -169,6 +174,7 @@ const Log = () => {
                 name="mot_de_passe"
                 id="mot_de_passe_login"
                 placeholder="Mot de passe"
+                required
                 onChange={handleChangeLogin}
                 value={loginData.mot_de_passe}
               />
@@ -185,7 +191,7 @@ const Log = () => {
 
         {/* Formulaire Register */}
         {!showLogin && (
-          <form onSubmit={handleRegisterSubmit} action="POST" id="register">
+          <form onSubmit={handleRegisterSubmit} id="register">
             {registerError &&
               (
                 <div className="alertregister">
@@ -259,11 +265,11 @@ const Log = () => {
 
             <label> Numéro de téléphone </label>
             <input
-              type="text"
-              name="telephone"
+              type="tel"
+              name="numero_telephone"
               id="telephone"
               placeholder="Numéro de téléphone"
-              value={registerData.telephone}
+              value={registerData.numero_telephone}
               onChange={handleChangeRegister}
             />
             <button type="submit">S'inscrire</button>

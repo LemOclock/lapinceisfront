@@ -37,7 +37,7 @@ export default function MenuBurger() {
               <span className="profil-text">Profil/Paramètres</span>
               <img
                 className="profil-icon"
-                src="../../img/icon_compte.png"
+                src="/img/icon_compte.png"
                 alt="Logo"
               />
             </a>

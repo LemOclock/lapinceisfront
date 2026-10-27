@@ -5,12 +5,12 @@ import "./Budget.scss";
 import {
   getUserBudgets,
   getOperations,
-  searchOperations,
   createBudget,
   updateBudget,
   deleteBudget,
 } from "../../api/budgetApi";
-import { findCompteId, getAllCategories } from "../../api/gestion";
+import { getAllCategories } from "../../api/gestion";
+import { getErrorMessage } from "../../api/api";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState({});
@@ -41,9 +41,6 @@ const Budget = () => {
     montant: "",
   });
   const [localSearches, setLocalSearches] = useState({});
-
-  // Cache pour éviter appels API dupliqués
-  const [percentageUpdates, setPercentageUpdates] = useState({});
 
   const monthNames = [
     "JANVIER",
@@ -192,7 +189,6 @@ const Budget = () => {
     }
 
     try {
-      const compteResponse = await findCompteId();
       const selectedCategory = categoriesWithIds.find(
         (cat) => cat.nom_categorie === editForm.categorie
       );
@@ -209,10 +205,6 @@ const Budget = () => {
         nom_budget: editForm.nom.trim(),
         categorieId: selectedCategory?.id,
         montant_limite: Math.round(parseFloat(editForm.montant) * 100) / 100,
-        mois: currentDate.getMonth() + 1,
-        annee: currentDate.getFullYear(),
-        compteId: compteResponse.data.id,
-        seuil_alerte: 80,
       };
 
       const response = await updateBudget(currentBudget.id, budgetData);
@@ -223,12 +215,7 @@ const Budget = () => {
         closeEditModal();
       }
     } catch (error) {
-      console.error("Erreur modification budget:", error);
-      alert(
-        error.response?.data?.errors?.budget ||
-          error.response?.data?.message ||
-          "Erreur lors de la modification du budget"
-      );
+      alert(getErrorMessage(error, "Erreur lors de la modification du budget"));
     }
   };
 
@@ -255,19 +242,17 @@ const Budget = () => {
         closeDeleteModal();
       }
     } catch (error) {
-      console.error("Erreur suppression budget:", error);
-      alert(
-        error.response?.data?.errors?.budget ||
-          error.response?.data?.message ||
-          "Erreur lors de la suppression du budget"
-      );
+      alert(getErrorMessage(error, "Erreur lors de la suppression du budget"));
     }
   };
 
   const loadCategories = async () => {
     try {
       const response = await getAllCategories();
-      setCategoriesWithIds(response.data);
+      // Un budget ne concerne que des dépenses
+      setCategoriesWithIds(
+        response.data.filter((cat) => cat.type_categorie === "depense")
+      );
     } catch (error) {
       console.error("Erreur catégories:", error);
     }
@@ -301,38 +286,16 @@ const Budget = () => {
     setIsSearching(false);
   }, [currentDate, budgets]);
 
-  const searchAllOperations = useCallback(async () => {
-    setIsSearching(true);
-    try {
-      const month = currentDate.getMonth() + 1;
-      const year = currentDate.getFullYear();
-      const response = await searchOperations(month, year);
-
-      const allOperations = response.data.operations || [];
-      const operationsByBudget = {};
-
-      for (const [budgetName] of Object.entries(budgets)) {
-        const filteredOps = allOperations.filter((op) => {
-          const matchesBudget =
-            op.budget_name === budgetName || op.nom_budget === budgetName;
-          const matchesQuery =
-            searchQuery === "" ||
-            op.libelle?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            op.lieu?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            op.price?.toString().includes(searchQuery);
-
-          return matchesBudget && matchesQuery;
-        });
-        operationsByBudget[budgetName] = filteredOps;
-      }
-
-      setAllOperations(operationsByBudget);
-    } catch (error) {
-      console.error("Erreur recherche:", error);
-      fetchAllOperations();
-    }
-    setIsSearching(false);
-  }, [budgets, searchQuery, currentDate, fetchAllOperations]);
+  // Filtre local des opérations (libellé, lieu ou montant)
+  const matchesSearch = (operation, query) => {
+    if (!query) return true;
+    const searchTerm = query.toLowerCase();
+    return (
+      operation.libelle?.toLowerCase().includes(searchTerm) ||
+      operation.lieu?.toLowerCase().includes(searchTerm) ||
+      operation.price?.toString().includes(searchTerm)
+    );
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -352,13 +315,6 @@ const Budget = () => {
       fetchAllOperations();
     }
   }, [fetchAllOperations]);
-
-  useEffect(() => {
-    if (searchQuery && Object.keys(budgets).length > 0) {
-      const timeout = setTimeout(searchAllOperations, 300);
-      return () => clearTimeout(timeout);
-    }
-  }, [searchQuery, searchAllOperations]);
 
   const updateForm = useCallback((field, value) => {
     let sanitizedValue = value;
@@ -435,7 +391,6 @@ const Budget = () => {
     }
 
     try {
-      const compteResponse = await findCompteId();
       const selectedCategory = categoriesWithIds.find(
         (cat) => cat.nom_categorie === form.categorie
       );
@@ -446,7 +401,6 @@ const Budget = () => {
         montant_limite: Math.round(parseFloat(form.montant) * 100) / 100,
         mois: currentDate.getMonth() + 1,
         annee: currentDate.getFullYear(),
-        compteId: compteResponse.data.id,
         seuil_alerte: 80,
       };
 
@@ -458,12 +412,7 @@ const Budget = () => {
         closeModal();
       }
     } catch (error) {
-      console.error("Erreur création budget:", error);
-      alert(
-        error.response?.data?.errors?.budget ||
-          error.response?.data?.message ||
-          "Erreur lors de la création du budget"
-      );
+      alert(getErrorMessage(error, "Erreur lors de la création du budget"));
     }
   };
 
@@ -475,29 +424,6 @@ const Budget = () => {
     }
     setSearchQuery(value);
   };
-
-  // Évite les appels API en boucle
-  const updatePercentage = useCallback(
-    async (budgetName, progressPercent) => {
-      if (percentageUpdates[budgetName] === progressPercent) return;
-
-      try {
-        const currentBudget = budgets[budgetName];
-        if (currentBudget?.id) {
-          await updateBudget(currentBudget.id, {
-            seuil_pourcentage: progressPercent,
-          });
-          setPercentageUpdates((prev) => ({
-            ...prev,
-            [budgetName]: progressPercent,
-          }));
-        }
-      } catch (error) {
-        console.error("Erreur mise à jour pourcentage:", error);
-      }
-    },
-    [budgets, percentageUpdates]
-  );
 
   // Calculs des stats
   const getBudgetStats = useMemo(() => {
@@ -526,14 +452,6 @@ const Budget = () => {
     };
   }, [budgets, allOperations]);
 
-  // Appels API centralisés dans useEffect dédié
-  useEffect(() => {
-    Object.keys(budgets).forEach((budgetName) => {
-      const { progressPercent } = getBudgetStats(budgetName);
-      updatePercentage(budgetName, progressPercent);
-    });
-  }, [budgets, allOperations, getBudgetStats, updatePercentage]);
-
   const nextSlide = () =>
     setCurrentSlide((prev) => Math.min(prev + 1, maxSlides));
   const prevSlide = () => setCurrentSlide((prev) => Math.max(prev - 1, 0));
@@ -550,15 +468,9 @@ const Budget = () => {
     const operations = allOperations[budgetName] || [];
     const localSearch = localSearches[budgetName] || "";
 
-    const filteredOperations = operations.filter((operation) => {
-      if (!localSearch) return true;
-      const searchTerm = localSearch.toLowerCase();
-      return (
-        operation.libelle?.toLowerCase().includes(searchTerm) ||
-        operation.lieu?.toLowerCase().includes(searchTerm) ||
-        operation.price?.toString().includes(searchTerm)
-      );
-    });
+    const filteredOperations = operations.filter((operation) =>
+      matchesSearch(operation, localSearch)
+    );
 
     const updateLocalSearch = (value) => {
       setLocalSearches((prev) => ({
@@ -875,7 +787,9 @@ const Budget = () => {
               <span>Date</span>
               <span>Lieu</span>
             </div>
-            {(allOperations[selectedBudget] || []).map((t, i) => (
+            {(allOperations[selectedBudget] || [])
+              .filter((t) => matchesSearch(t, searchQuery))
+              .map((t, i) => (
               <div key={i} className="table-row">
                 <span className="table-libelle">{t.libelle}</span>
                 <span className="table-montant">{t.price}€</span>
@@ -883,7 +797,9 @@ const Budget = () => {
                 <span className="table-lieu">{t.lieu}</span>
               </div>
             ))}
-            {(allOperations[selectedBudget] || []).length === 0 &&
+            {(allOperations[selectedBudget] || []).filter((t) =>
+              matchesSearch(t, searchQuery)
+            ).length === 0 &&
               selectedBudget && (
                 <div className="table-row">
                   <span

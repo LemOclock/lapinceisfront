@@ -1,8 +1,8 @@
-import Style from './alertes.scss';
+import './alertes.scss';
 import { useEffect, useState } from 'react';
 import { getUserBudgets } from '../../api/budgetApi';
-import { log } from 'console';
 
+// Alertes sur les budgets du mois en cours (pourcentage calculé par l'API)
 export default function Alertes() {
     const [budgets, setBudgets] = useState([]);
 
@@ -10,23 +10,20 @@ export default function Alertes() {
         const fetchBudgets = async () => {
             try {
                 const response = await getUserBudgets();
-                const budgetData = response.data.budgets;
-
-                const budgetsArray = Object.values(budgetData);
+                const now = new Date();
+                const budgetsArray = Object.values(response.data.budgets || {}).filter(
+                    (budget) => budget.mois === now.getMonth() + 1 && budget.annee === now.getFullYear()
+                );
                 setBudgets(budgetsArray);
-
-
-
             } catch (err) {
                 console.error('Erreur lors du chargement des budgets:', err);
             }
         };
-        console.log('Budgets:', budgets);
 
         fetchBudgets();
     }, []);
 
-    const hasAlertes = budgets.some(budget => budget.seuil_pourcentage > 50);
+    const hasAlertes = budgets.some(budget => budget.pourcentage > 50);
 
     if (!hasAlertes) {
         return null;
@@ -38,28 +35,27 @@ export default function Alertes() {
             <a href="/budget">
                 <button>Voir les budgets</button>
             </a>
-            {/* probleme de la table alerte on va faire un appel api mais je vois mal l'utilité  */}
 
             <div className='alertes-container'>
                 { budgets.map((budget) => {
-                    if (budget.seuil_pourcentage > 50 && budget.seuil_pourcentage <= 80) {
+                    if (budget.pourcentage > 50 && budget.pourcentage <= 80) {
                         return (
                             <p className='low-alert' key={budget.id}>
-                                Votre budget {budget.nom} est en bonne santé.
+                                Vous avez utilisé {budget.pourcentage}% de votre budget {budget.nom}.
                             </p>
                         );
                     }
-                    else if (budget.seuil_pourcentage > 80 && budget.seuil_pourcentage < 100) {
+                    else if (budget.pourcentage > 80 && budget.pourcentage < 100) {
                         return (
                             <p className='medium-alert' key={budget.id}>
-                                Votre budget {budget.nom} est en alerte.
+                                Votre budget {budget.nom} est en alerte ({budget.pourcentage}%).
                             </p>
                         );
                     }
-                    else if (budget.seuil_pourcentage === 100) {
+                    else if (budget.pourcentage >= 100) {
                         return (
                             <p className='high-alert' key={budget.id}>
-                                Votre budget {budget.nom} est en situation critique.
+                                Votre budget {budget.nom} est dépassé ({budget.pourcentage}%).
                             </p>
                         );
                     }
